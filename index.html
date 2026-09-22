@@ -1494,19 +1494,29 @@ function lotSizeFor(a){ return isFullLoaded(a) ? a.full.lotSize : 100000; }
 // New — balance-based position sizing ("no calculating the account
 // balance to know how many positions it should enter with"): cfg.lotSize
 // used to be sent to every order exactly as typed, with zero connection to
-// the actual account balance. When cfg.riskPercent is 0 this still behaves
-// exactly like before (fixed lot). When it's set, this scales cfg.lotSize
-// by how much the balance has grown/shrunk since this session's first
-// known balance — same approach as our other bot's computeLots().
+// the actual account balance.
+// FIX (0.06-lot NOT_ENOUGH_MONEY after balance grew from ~$5 to $28 in one
+// session): this used to scale cfg.lotSize by the raw balance RATIO since
+// session start (balance/startBalance × risk%) — continuous and compounding,
+// so a small account that grows a few times over can jump lot size far
+// faster than its margin can actually support. Replaced with the same
+// approach the Deriv bot's own computeLots() uses: a flat +0.01 lot for
+// every full $50 of real profit growth, nothing more — $50 profit -> 0.02
+// (from a 0.01 base), $100 -> 0.03, and so on. Same idea, much gentler
+// curve, matches the bot you're comparing this against.
 function effectiveLotSize(){
-  if(!cfg.riskPercent||cfg.riskPercent<=0)return cfg.lotSize;
+  const base=cfg.lotSize;
+  if(!cfg.riskPercent||cfg.riskPercent<=0)return base;
   const bal=state.paper?state.paperBalance:state.balance;
-  if(bal==null||!Number.isFinite(bal)||bal<=0)return cfg.lotSize;
+  if(bal==null||!Number.isFinite(bal)||bal<=0)return base;
   const key=state.paper?'lotScaleBasePaper':'lotScaleBaseReal';
   if(state[key]==null)state[key]=bal;
-  const scale=bal/state[key];
-  const scaled=cfg.lotSize*scale*(cfg.riskPercent/100)*100; // riskPercent=100 means "scale 1:1 with balance ratio"
-  return Math.max(0.01,+scaled.toFixed(2));
+  const profit=bal-state[key];
+  if(profit>=50){
+    const steps=Math.floor(profit/50);
+    return Math.round((base+steps*0.01)*100)/100;
+  }
+  return base;
 }
 function volumeFor(a, lots){
   const lotSize=lotSizeFor(a);

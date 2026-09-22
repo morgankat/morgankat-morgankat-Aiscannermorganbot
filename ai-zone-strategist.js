@@ -53,7 +53,17 @@ const AI = window.AIZone = {
     autoLot:true,        // size lots from balance × risk% instead of the fixed Lot Size field
     riskPct:1,           // % of balance risked per trade when autoLot is on
     scannerOn:true,       // periodically rank symbols and offer to switch
-    ghostMode:false       // flip on EVERY grid/scalping close, no filter (video-style)
+    ghostMode:false,      // flip on EVERY grid/scalping close, no filter (video-style)
+    structureTf:15        // FIX ("bot over-sleeps, doesn't fire like the fast reference
+                           // bot"): BOS/zone detection used to read off cfg.tf, the SAME
+                           // timeframe you trade on. On 1m that made structure noisy; on
+                           // 5m it meant only one entry shot every 5 minutes, and either
+                           // way the entry-distance gate's ATR buffer was measured on
+                           // that same fast timeframe, so it was tiny and could block
+                           // almost every entry near a zone. Structure now always reads
+                           // off a fixed 15m view, independent of whatever fast
+                           // timeframe you actually trade on — you can run 1m for speed
+                           // without the structure gate slowing it down.
   }, loadCfg()),
   zones:{},        // per-symbol: up to 2 entries — the last bullish + bearish BOS level
   bos:{},          // per-symbol: {bull:{price,at}, bear:{price,at}} raw structure levels
@@ -127,7 +137,7 @@ function computeBOS(bars){
 // from a "zone" — a thin band around the level instead of a wide cluster.
 function detectZones(a){
   if(!a||!a.dataReady) return [];
-  const bars=tfBars(a, (typeof cfg!=='undefined'&&cfg.tf)||15);
+  const bars=tfBars(a, AI.cfg.structureTf||15);
   if(!bars||bars.length<20) return [];
   const atrVal=(typeof atr==='function'&&atr(bars,14))||( (a.lastPrice||1)*0.001 );
   const bos=computeBOS(bars);
@@ -221,7 +231,7 @@ AI.zoneAllowsEntry=function(a,side){
   if(!AI.cfg.masterOn||!AI.cfg.zoneSLTP) return true;
   const px=a.lastPrice; if(!px) return true;
   const z=nearestZone(a,side,px); if(!z||!z.slZone) return true;
-  const atrVal=(typeof atr==='function'&&atr(tfBars(a,cfg.tf),14))||px*0.001;
+  const atrVal=(typeof atr==='function'&&atr(tfBars(a,AI.cfg.structureTf||15),14))||px*0.001;
   const edge=side==='BUY'?z.slZone.bottom:z.slZone.top;
   return Math.abs(px-edge)<=atrVal*1.5;
 };
@@ -232,7 +242,7 @@ AI.slDistanceFor=function(a,side){
   if(!AI.cfg.masterOn||!AI.cfg.zoneSLTP) return null;
   const px=a.lastPrice; if(!px) return null;
   const z=nearestZone(a,side,px); if(!z||!z.slZone) return null;
-  const atrVal=(typeof atr==='function'&&atr(tfBars(a,cfg.tf),14))||px*0.001;
+  const atrVal=(typeof atr==='function'&&atr(tfBars(a,AI.cfg.structureTf||15),14))||px*0.001;
   const edge=side==='BUY'?z.slZone.bottom:z.slZone.top;
   const dist=Math.abs(px-edge)+atrVal*0.15; // small buffer beyond the zone edge
   return (dist>0 && Number.isFinite(dist)) ? dist : null;
@@ -721,9 +731,9 @@ function tick(){
       // not you have the panel open.
       AI.scanPairs(function(results){
         renderPanel();
-        if(results && results.length){
-          const top=results[0];
-          log('AI scan: cleanest setup is '+top.label+' — '+top.dir+' bias, clarity '+top.score+'%, suggested '+(typeof STRATEGY_LABELS!=='undefined'&&STRATEGY_LABELS[top.strategy]||top.strategy)+'. Open the AI panel to accept it.');
+        const top=results&&results[0];
+        if(top&&top.dir&&top.label){
+          log('AI scan: cleanest setup is '+top.label+' — '+top.dir+' bias, clarity '+top.score+'%, suggested '+(top.strategyLabel||top.strategy||'unknown')+'. Open the AI panel to accept it.');
         }else{
           log('AI scan: no clean setup across your pairs right now.');
         }
