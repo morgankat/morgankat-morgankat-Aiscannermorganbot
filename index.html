@@ -213,7 +213,7 @@ h1,h2,h3,.brand{font-family:'Orbitron',sans-serif;}
   }
 }
 </script>
-<meta name="series-x-version" content="V9 Smart Candle Confirmation Scalper + Owner License Gate"><!-- Series X V9: closed-candle confirmation scalper, protected exits, Grid-matched risk controls --></head>
+<meta name="series-x-version" content="V7 Strict Same-Candle Profit Flip + Owner License Gate"><!-- Series X V7: confirmed same-candle scalper, opposite-side profit flip, Grid-matched profit protection --></head>
 <body>
 <div id="app">
 <div id="meganBodyContainer"></div>
@@ -221,7 +221,7 @@ h1,h2,h3,.brand{font-family:'Orbitron',sans-serif;}
 
 <div id="voiceCaption" class="hidden" style="position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:210;max-width:88vw;padding:8px 14px;border-radius:10px;background:rgba(10,10,15,0.75);backdrop-filter:blur(6px);border:1px solid rgba(0,240,255,0.3);color:#e8e8f0;font-family:'Rajdhani',sans-serif;font-size:12px;line-height:1.4;text-align:center;pointer-events:none;transition:opacity .25s;"></div>
 
-<div id="meganFab" onclick="toggleMeganPanel()" style="position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;z-index:211;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#1a1a25,#0f0f15);border:1px solid var(--cyan);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 12px rgba(0,240,255,0.25);touch-action:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;">
+<div id="meganFab" onclick="toggleMeganPanel()" style="position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;z-index:211;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#1a1a25,#0f0f15);border:1px solid var(--cyan);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 12px rgba(0,240,255,0.25);">
   <span id="meganFabDot" style="width:9px;height:9px;border-radius:50%;background:var(--dim);"></span>
 </div>
 <div id="seriesxSignalFab" onclick="toggleSeriesXScannerPanel()" style="position:fixed;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 72px);z-index:212;width:58px;height:42px;border-radius:22px;background:rgba(15,15,25,.78);backdrop-filter:blur(8px);border:1px solid rgba(0,240,255,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 14px rgba(0,240,255,.18);touch-action:none;user-select:none;">
@@ -248,10 +248,8 @@ h1,h2,h3,.brand{font-family:'Orbitron',sans-serif;}
      root — same folder as index.html itself, no assets/ subfolder);
      the ticker lines scroll upward over it like a HUD boot log. -->
 <div id="scrIntro" class="screen active" style="background:#000 url('splash_web.jpg') center/cover no-repeat;">
-  <div id="introTicker" style="position:absolute;left:0;right:0;bottom:11%;height:170px;overflow:hidden;-webkit-mask-image:linear-gradient(to top, black 55%, transparent 100%);mask-image:linear-gradient(to top, black 55%, transparent 100%);"></div>
-  <div id="introCountdown" style="position:absolute;left:50%;bottom:3.5%;transform:translateX(-50%);width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(8,10,16,.28);border:1px solid rgba(0,240,255,.42);box-shadow:0 0 18px rgba(0,240,255,.16),inset 0 0 18px rgba(0,240,255,.08);backdrop-filter:blur(2px);z-index:5;pointer-events:none;">
-    <div style="text-align:center;font-family:Orbitron,sans-serif;line-height:1;"><div id="introCountdownNum" style="font-size:22px;color:#e8fbff;text-shadow:0 0 10px rgba(0,240,255,.75);">30</div><div style="font-size:6px;letter-spacing:1.2px;color:#8bdfff;margin-top:4px;">BOT OPENS IN</div></div>
-  </div>
+  <div id="introTicker" style="position:absolute;left:0;right:0;bottom:9%;height:150px;overflow:hidden;-webkit-mask-image:linear-gradient(to top, black 60%, transparent 100%);mask-image:linear-gradient(to top, black 60%, transparent 100%);"></div>
+  <div style="position:absolute;left:0;right:0;bottom:2%;text-align:center;font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:2px;color:#7fd8ff;text-shadow:0 0 8px rgba(0,200,255,.7);">INITIALIZING SERIES X ULTRA AI…</div>
 </div>
 <!-- SPLASH -->
 <!-- FIX (live 3D Megan replaces the old static header robot): the splash
@@ -628,7 +626,7 @@ let state={
   assets:{},currentSymbol:'XAUUSD',symbolsByNorm:{},bnSymbolList:[],pendingTrendbarRequests:{},
   bnSockets:{},bnRelayUrl:'http://localhost:8788',bnApiKey:'',bnApiSecret:'',
   chart:null,candleSeries:null,chartData:[],lastChartUpdate:0,
-  newsEvents:[],nextEvent:null,newsMode:false,newsBlackout:false,meganAuto:false,licenseStatus:'unknown',licenseLastCheck:0,licenseTimer:null,scannerRateLimitedUntil:0,clientRegistered:false,clientRegisterRetry:null
+  newsEvents:[],nextEvent:null,newsMode:false,newsBlackout:false,meganAuto:false,licenseStatus:'unknown',licenseLastCheck:0,licenseTimer:null
 };
 
 let cfg={
@@ -788,7 +786,7 @@ function log(msg){
   // back through what she's done instead of it vanishing after 5 lines.
   while(el.children.length>200)el.removeChild(el.lastChild);
 }
-function setText(id,txt){const e=$(id);if(e&&e.textContent!==String(txt))e.textContent=txt;}
+function setText(id,txt){const e=$(id);if(e)e.textContent=txt;}
 // REMOVED (per request — "remove that notification system... its making my
 // bot not react faster every after closing a trade, it has to open trades
 // immediately faster after closing one, let the broker platform do the
@@ -953,8 +951,6 @@ async function ownerLoadClients(){
         +(seen?'<div style="font-size:9px;color:var(--dim);margin-top:2px;">Last seen: '+seen+'</div>':'')
         +'</div>';
     }).join('');
-    clearTimeout(window.__seriesxOwnerRefresh);
-    window.__seriesxOwnerRefresh=setTimeout(()=>{const panel=document.getElementById('ownerControlPanel');if(panel&&panel.style.display!=='none'&&ownerSessionToken)ownerLoadClients();},10000);
   }catch(e){if(box)box.textContent='License service unavailable.';}
 }
 // Quick one-tap toggle from the client list rows, reusing the same
@@ -970,18 +966,12 @@ async function registerSeriesXClient(clientId){
   const id=String(clientId||'').trim();
   if(!id)return null;
   try{
-    const r=await fetch(SERIESX_LICENSE_API_DEFAULT.replace(/\/$/,'')+'/register',{
+    const r=await fetch(SERIESX_LICENSE_API_DEFAULT.replace(/\/$/, '')+'/register',{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({clientId:id,broker:state.broker||'unknown',env:state.env||'unknown',appVersion:document.querySelector('meta[name=\"series-x-version\"]')?.content||'Series X'})
     });
-    const d=await r.json().catch(()=>null);
-    if(r.ok&&d?.ok){state.clientRegistered=true;clearTimeout(state.clientRegisterRetry);state.clientRegisterRetry=null;return d;}
-    throw new Error(d?.description||'registration failed');
-  }catch(e){
-    state.clientRegistered=false;clearTimeout(state.clientRegisterRetry);
-    state.clientRegisterRetry=setTimeout(()=>registerSeriesXClient(id),30000);
-    return null;
-  }
+    return await r.json().catch(()=>null);
+  }catch(e){ return null; }
 }
 
 // Backfill an already-logged-in client on the next app load so clients who
@@ -1632,17 +1622,8 @@ function handleCT(m){
     case PT.ERROR_RES:{
       hideLoading();state.connecting=false;
       const code=p.errorCode||'';
-      const desc=String(p.description||'');
-      log('API error: '+code+(desc?' — '+desc:''));
-      if(/rate limit/i.test(desc)||code==='BLOCKED_PAYLOAD_TYPE'){
-        // cTrader is explicitly telling us to slow down. Do not reconnect or
-        // retry scanner history immediately: that creates a request storm and
-        // makes the rate limit last longer. Pause scanner history retries for
-        // 20 seconds while the live connection remains available.
-        state.scannerRateLimitedUntil=Date.now()+20000;
-        ctStatus('cTrader rate limit — slowing scanner requests for 20s.');
-        log('Scanner throttled for 20s to clear the cTrader rate limit.');
-      }else if(code==='CANT_ROUTE_REQUEST'){
+      log('API error: '+code);
+      if(code==='CANT_ROUTE_REQUEST'){
         // Server-side routing conflict, usually a previous session for this
         // account not yet cleaned up on cTrader's end — not actually your
         // token expiring. Retrying immediately tends to add to the pileup,
@@ -1678,7 +1659,7 @@ function applyBNAccount(acct){if(!acct||acct.error)return;if(acct.balances){cons
 // ========== ASSET INIT ==========
 function initAsset(){
   const sym=state.currentSymbol;const def=SYM_DEFS[sym];if(!def)return;
-  if(!state.assets[sym])state.assets[sym]={key:sym,label:def.label,name:def.name,symbolId:null,full:null,lastPrice:0,bid:null,ask:null,bars1:[],bars5:[],bars15:[],bars30:[],bars60:[],currentBar:null,dataReady:false,positions:[],signal:'WAIT',score:0,streak:0,lastDir:'WAIT',lastTradeAt:0,lastCloseAt:0,floatingPnL:0,emaFast:null,emaSlow:null,emaTrend:null,rsi:null,atr:null,momentum:0,orderPending:false,orderPendingAt:0,forceNextSide:null,tradingEnabled:true,lastEntryBarT:null,scalpPeakFloating:0,scalpProfitLockArmed:false,scalpFlipPending:false,scalpPendingSide:null,scalpLastBarT:null,scalpConfirmSide:null,scalpConfirmCount:0,scalpLastConfirmPrice:null,scalpLastConfirmAt:0,scalpPendingMode:null,scalpLastClosedSide:null,scalpReverseConfirmedSide:null,scalpReverseCount:0,scalpReverseStartPrice:null,scalpReverseAnchorPrice:null,scalpReverseBarT:null,scalpUpCount:0,scalpDownCount:0,scalpUpStartPrice:null,scalpDownStartPrice:null,scalpCooldownUntil:0,scalpLastClosedBarT:null,scalpSignalBarT:null,scalpWaitBarsAfterClose:0,scalpPatternReason:'',scalpPatternType:'',scalpReversalScore:0};
+  if(!state.assets[sym])state.assets[sym]={key:sym,label:def.label,name:def.name,symbolId:null,full:null,lastPrice:0,bid:null,ask:null,bars1:[],bars5:[],bars15:[],bars30:[],bars60:[],currentBar:null,dataReady:false,positions:[],signal:'WAIT',score:0,streak:0,lastDir:'WAIT',lastTradeAt:0,lastCloseAt:0,floatingPnL:0,emaFast:null,emaSlow:null,emaTrend:null,rsi:null,atr:null,momentum:0,orderPending:false,orderPendingAt:0,forceNextSide:null,tradingEnabled:true,lastEntryBarT:null,scalpPeakFloating:0,scalpProfitLockArmed:false,scalpFlipPending:false,scalpPendingSide:null,scalpLastBarT:null,scalpConfirmSide:null,scalpConfirmCount:0,scalpLastConfirmPrice:null,scalpLastConfirmAt:0,scalpPendingMode:null,scalpLastClosedSide:null,scalpReverseConfirmedSide:null,scalpReverseCount:0,scalpReverseStartPrice:null,scalpReverseAnchorPrice:null,scalpReverseBarT:null,scalpUpCount:0,scalpDownCount:0,scalpUpStartPrice:null,scalpDownStartPrice:null};
   const a=state.assets[sym];a.bnSymbol=def.bn;
   a.tradingEnabled=true; // FIX #14 (continued) — re-selecting a previously deactivated symbol reactivates it
   setText('sigPair',def.label+' - '+def.name);
@@ -1689,36 +1670,21 @@ function initAssetBN(){initAsset();const a=state.assets[state.currentSymbol];if(
 
 function createSeriesXScannerAsset(key){
   const def=SYM_DEFS[key];if(!def||state.assets[key])return state.assets[key]||null;
-  state.assets[key]={key,label:def.label,name:def.name,symbolId:null,full:null,lastPrice:0,bid:null,ask:null,bars1:[],bars5:[],bars15:[],bars30:[],bars60:[],currentBar:null,dataReady:false,positions:[],signal:'WAIT',score:0,streak:0,lastDir:'WAIT',lastTradeAt:0,lastCloseAt:0,floatingPnL:0,emaFast:null,emaSlow:null,emaTrend:null,rsi:null,atr:null,momentum:0,orderPending:false,orderPendingAt:0,forceNextSide:null,tradingEnabled:false,scannerOnly:true,lastEntryBarT:null,scalpPeakFloating:0,scalpProfitLockArmed:false,scalpFlipPending:false,scalpPendingSide:null,scalpLastBarT:null,scalpConfirmSide:null,scalpConfirmCount:0,scalpLastConfirmPrice:null,scalpLastConfirmAt:0,scalpPendingMode:null,scalpLastClosedSide:null,scalpReverseConfirmedSide:null,scalpReverseCount:0,scalpReverseStartPrice:null,scalpReverseAnchorPrice:null,scalpReverseBarT:null,scalpUpCount:0,scalpDownCount:0,scalpUpStartPrice:null,scalpDownStartPrice:null,scalpCooldownUntil:0,scalpLastClosedBarT:null,scalpSignalBarT:null,scalpWaitBarsAfterClose:0,scalpPatternReason:'',scalpPatternType:'',scalpReversalScore:0};
+  state.assets[key]={key,label:def.label,name:def.name,symbolId:null,full:null,lastPrice:0,bid:null,ask:null,bars1:[],bars5:[],bars15:[],bars30:[],bars60:[],currentBar:null,dataReady:false,positions:[],signal:'WAIT',score:0,streak:0,lastDir:'WAIT',lastTradeAt:0,lastCloseAt:0,floatingPnL:0,emaFast:null,emaSlow:null,emaTrend:null,rsi:null,atr:null,momentum:0,orderPending:false,orderPendingAt:0,forceNextSide:null,tradingEnabled:false,scannerOnly:true,lastEntryBarT:null,scalpPeakFloating:0,scalpProfitLockArmed:false,scalpFlipPending:false,scalpPendingSide:null,scalpLastBarT:null,scalpConfirmSide:null,scalpConfirmCount:0,scalpLastConfirmPrice:null,scalpLastConfirmAt:0,scalpPendingMode:null,scalpLastClosedSide:null,scalpReverseConfirmedSide:null,scalpReverseCount:0,scalpReverseStartPrice:null,scalpReverseAnchorPrice:null,scalpReverseBarT:null,scalpUpCount:0,scalpDownCount:0,scalpUpStartPrice:null,scalpDownStartPrice:null};
   return state.assets[key];
 }
 function startSeriesXScannerFeeds(){
   if(!state.accountReady)return;
-  if(state.scannerRateLimitedUntil&&Date.now()<state.scannerRateLimitedUntil){setTimeout(startSeriesXScannerFeeds,Math.max(1000,state.scannerRateLimitedUntil-Date.now()));return;}
   const keys=['XAUUSD','EURUSD','GBPUSD','USDJPY','USDCHF','USDCAD','AUDUSD','BTCUSDT','ETHUSDT'];
-  const jobs=[];
   keys.forEach(key=>{
     if(key===state.currentSymbol)return;
     const def=SYM_DEFS[key];const hit=def&&def.ctMatch.map(m=>state.symbolsByNorm[norm(m)]).find(Boolean);if(!hit)return;
     const a=createSeriesXScannerAsset(key);if(!a)return;
-    if(a.symbolId===hit.symbolId&&a.subscribedSymbolId===hit.symbolId&&a.dataReady)return;
-    a.symbolId=hit.symbolId;a.full=a.full||hit;
-    jobs.push({a,hit});
-  });
-  jobs.forEach((job,i)=>{
-    setTimeout(()=>{
-      const {a,hit}=job;
-      a.symbolId=hit.symbolId;
-      requestFullSymbol(a,hit.symbolId);
-      if(a.subscribedSymbolId!==hit.symbolId){
-        a.subscribedSymbolId=hit.symbolId;
-        send(PT.SUBSCRIBE_SPOTS_REQ,{ctidTraderAccountId:state.accountId,symbolId:[hit.symbolId]});
-      }
-      if(!a.dataReady&&!(a.__histAt&&Date.now()-a.__histAt<60000)){
-        a.__histAt=Date.now();
-        fetchHistory(hit.symbolId,1,true);
-      }
-    },i*2500);
+    if(a.symbolId===hit.symbolId&&a.subscribedSymbolId===hit.symbolId)return;
+    a.symbolId=hit.symbolId;a.full=a.full||hit;a.subscribedSymbolId=hit.symbolId;
+    requestFullSymbol(a,hit.symbolId);
+    send(PT.SUBSCRIBE_SPOTS_REQ,{ctidTraderAccountId:state.accountId,symbolId:[hit.symbolId]});
+    fetchHistory(hit.symbolId);
   });
 }
 
@@ -1871,11 +1837,17 @@ function dollarPerUnitFor(volumeInBrokerUnits,a){
 }
 function digitsFor(a){ return a.full && a.full.digits!=null ? a.full.digits : (SYM_DEFS[a.key]?SYM_DEFS[a.key].digits:5); }
 function roundToDigits(price,digits){ const s=Math.pow(10,digits); return Math.round(price*s)/s; }
-function fetchHistory(id,attempt,isScanner){
-  const minutes=isScanner?420:3200;
-  const msgId=send(PT.GET_TRENDBARS_REQ,{ctidTraderAccountId:state.accountId,symbolId:id,period:'M1',fromTimestamp:Date.now()-minutes*60000,toTimestamp:Date.now()});
-  const n=attempt||1;if(msgId)state.pendingTrendbarRequests[msgId]={symId:id,attempt:n,isScanner:!!isScanner};
-  setTimeout(()=>{if(msgId&&state.pendingTrendbarRequests[msgId]){delete state.pendingTrendbarRequests[msgId];if(n<2)setTimeout(()=>fetchHistory(id,n+1,isScanner),15000);}},12000);
+function fetchHistory(id,attempt){
+  // FIX ("fix it so it loads faster the chart... starting with a lot of
+  // candles"): this was requesting 8640 minutes (6 days) of history every
+  // time, but applyHistory immediately throws away anything past the most
+  // recent 3000 bars (.slice(-3000), ~2 days) — so roughly 2/3 of every
+  // history response was pure wasted transfer/parse time, on every single
+  // symbol switch. Asking for only what's actually kept is a direct,
+  // real speed win with zero loss of usable data.
+  const msgId=send(PT.GET_TRENDBARS_REQ,{ctidTraderAccountId:state.accountId,symbolId:id,period:'M1',fromTimestamp:Date.now()-3200*60000,toTimestamp:Date.now()});
+  const n=attempt||1;if(msgId)state.pendingTrendbarRequests[msgId]={symId:id,attempt:n};
+  setTimeout(()=>{if(msgId&&state.pendingTrendbarRequests[msgId]){delete state.pendingTrendbarRequests[msgId];if(n<3)fetchHistory(id,n+1);}},10000);
 }
 function applyHistory(m,p){
   const pen=state.pendingTrendbarRequests[m.clientMsgId];delete state.pendingTrendbarRequests[m.clientMsgId];if(!pen)return;
@@ -1883,7 +1855,6 @@ function applyHistory(m,p){
   const raw=p.trendbar||[];if(!raw.length){if(pen.attempt<3)fetchHistory(pen.symId,pen.attempt+1);return;}
   a.bars1=raw.map(tb=>{const l=(tb.low||0)/1e5;return{t:tb.utcTimestampInMinutes*60000,o:l+(tb.deltaOpen||0)/1e5,h:l+(tb.deltaHigh||0)/1e5,l,c:l+(tb.deltaClose!=null?tb.deltaClose:(tb.deltaOpen||0))/1e5};}).sort((x,y)=>x.t-y.t).slice(-3000);
   buildHigher(a);a.dataReady=true;
-  computeSeriesXScannerPulse(a);
   // FIX ("I don't want to see the history loaded messages... let them
   // load in the background, I only want connection/trade messages"):
   // this line still runs every time (history still loads exactly the
@@ -2086,16 +2057,7 @@ function redrawChart(resetZoom){
     candleSeries.setData([]);emaLine1.setData([]);emaLine2.setData([]);emaLine3.setData([]);
     state.lastRenderedSymbol=state.currentSymbol;
   }
-  // FIX (user request, Sep 2026): chart used to render the FULL tfBars()
-  // array every redraw — up to 3000 candles when tf===1 — which is what was
-  // making candleSeries.setData()/EMA rebuilds slow and causing the
-  // freeze/stuck feeling whenever you switched strategy (saveConfig() calls
-  // redrawChart(true) on every save). The full history is still kept and
-  // still used for indicators/signals (tfBars() itself is untouched) — only
-  // what actually gets drawn on screen is capped, so strategies keep their
-  // full lookback depth and only rendering gets faster.
-  const CHART_RENDER_CANDLES=900;
-  const bars=tfBars(a,cfg.tf).slice(-CHART_RENDER_CANDLES);
+  const bars=tfBars(a,cfg.tf);
   if(!bars.length)return;
   const data=bars.map(b=>({time:b.t/1000,open:b.o,high:b.h,low:b.l,close:b.c}));
   const prevRange=(!resetZoom&&tvChart)?tvChart.timeScale().getVisibleLogicalRange():null;
@@ -2185,14 +2147,7 @@ function onSpot(p){
   // future bug in any single step gets logged and skipped instead of
   // silently freezing price, chart, and P&L updates for every asset.
   try{
-    // PERF FIX: pairs that are only being watched by the scanner (not the
-    // selected pair, no open positions) used to run the full indicator +
-    // strategy + dashboard pipeline on every tick. They only need candles
-    // and the light scanner pulse.
-    if(a.tradingEnabled===false&&!a.positions.length&&a.key!==state.currentSymbol){
-      updateBars(a,a.lastPrice,Date.now());computeSeriesXScannerPulse(a);return;
-    }
-    updateBars(a,a.lastPrice,Date.now());computeIndicators(a);computeSignal(a);computeSeriesXScannerPulse(a);
+    updateBars(a,a.lastPrice,Date.now());computeIndicators(a);computeSignal(a);
     if(a.positions.length){updatePositions(a);checkExits(a);checkTrail(a);if(!state.paused&&!state.stopped&&state.auto)maybeAddStackLeg(a);}
     if(!state.paused&&!state.stopped&&state.auto&&!state.newsBlackout)maybeTrade(a);
     if(state.newsTrading&&state.newsMode)newsBreakoutCheck(a);
@@ -2205,7 +2160,6 @@ function updateBars(a,price,now){
   if(!a.currentBar||a.currentBar.t!==min){
     if(a.currentBar){
       const closed=a.currentBar;
-      if(a.scalpWaitBarsAfterClose>0)a.scalpWaitBarsAfterClose=Math.max(0,a.scalpWaitBarsAfterClose-1);
       a.bars1.push(closed);if(a.bars1.length>3000)a.bars1.shift();
       updateHigherOnBar(a,closed);
       if(candleSeries&&a.key===state.currentSymbol){
@@ -2229,7 +2183,7 @@ function bnSubscribe(a){
     if(msg.e==='bookTicker'){
       a.bid=parseFloat(msg.b);a.ask=parseFloat(msg.a);a.lastPrice=(a.bid+a.ask)/2;
       try{ // FIX #18 — same defensive wrapping as onSpot above
-        updateBars(a,a.lastPrice,Date.now());computeIndicators(a);computeSignal(a);computeSeriesXScannerPulse(a);if(a.positions.length){updatePositions(a);checkExits(a);checkTrail(a);if(!state.paused&&!state.stopped&&state.auto)maybeAddStackLeg(a);}if(!state.paused&&!state.stopped&&state.auto&&!state.newsBlackout)maybeTrade(a);if(state.newsTrading&&state.newsMode)newsBreakoutCheck(a);updateChart(a,a.lastPrice,Date.now());updateDash();if(a.key===state.currentSymbol)meganAutoTick(a);
+        updateBars(a,a.lastPrice,Date.now());computeIndicators(a);computeSignal(a);if(a.positions.length){updatePositions(a);checkExits(a);checkTrail(a);if(!state.paused&&!state.stopped&&state.auto)maybeAddStackLeg(a);}if(!state.paused&&!state.stopped&&state.auto&&!state.newsBlackout)maybeTrade(a);if(state.newsTrading&&state.newsMode)newsBreakoutCheck(a);updateChart(a,a.lastPrice,Date.now());updateDash();if(a.key===state.currentSymbol)meganAutoTick(a);
       }catch(e){ if(window.console)console.error('Tick error on '+a.label+':',e); }
     }
     else if(msg.e==='kline'&&msg.k){const k=msg.k;const bar={t:Number(k.t),o:parseFloat(k.o),h:parseFloat(k.h),l:parseFloat(k.l),c:parseFloat(k.c),v:parseFloat(k.v||0)};if(!a.bars1.length||a.bars1[a.bars1.length-1].t!==bar.t)a.bars1.push(bar);else a.bars1[a.bars1.length-1]=bar;if(a.bars1.length>3000)a.bars1.shift();updateHigherOnBar(a,bar);computeIndicators(a);computeSignal(a);updateDash();}
@@ -2619,118 +2573,158 @@ function computeGridEntrySignal(a){
 // BUY, red/selling pressure = SELL. It intentionally uses currentBar.c so a
 // fast XAUUSD move can be detected before the 1-minute candle closes.
 function computeScalpingTwoSignal(a){
-  // SMART M1 CANDLE SCALPER — closed-candle confirmation only.
-  // The screenshots show a common failure mode in the previous engine:
-  // a downtrend produced a small bullish reaction, the bot treated that
-  // micro-pullback as a reversal, closed/reversed too quickly, and paid the
-  // spread repeatedly. This engine waits for completed candles and requires
-  // structure + candle evidence before it authorizes a fresh entry.
   if(!a.dataReady||!a.lastPrice){a.signal='WAIT';a.score=0;return;}
-  const bars=(a.bars1||[]).slice(-80);
-  if(bars.length<30){a.signal='WAIT';a.score=0;a.patternReason='Collecting M1 candle history';return;}
-  const n=bars.length;
-  const c1=bars[n-1],c2=bars[n-2],c3=bars[n-3],c4=bars[n-4];
-  if(!c1||!c2||!c3){a.signal='WAIT';a.score=0;return;}
-  const closes=bars.map(b=>b.c);
-  const e5=ema(closes,5),e13=ema(closes,13),e21=ema(closes,21),e50=ema(closes,50);
-  const r=rsi(closes,14),av=atr(bars,14)||0;
-  const trend=e13!=null&&e21!=null?(e13>e21?'BUY':e13<e21?'SELL':'WAIT'):'WAIT';
-  const slow=e21!=null&&e50!=null?(e21>e50?'BUY':e21<e50?'SELL':'WAIT'):'WAIT';
-  const body=b=>Math.abs(b.c-b.o),range=b=>Math.max(b.h-b.l,1e-9);
-  const bodyPct=b=>body(b)/range(b);
-  const upper=b=>b.h-Math.max(b.o,b.c),lower=b=>Math.min(b.o,b.c)-b.l;
-  const closeTop=b=>(b.c-b.l)/range(b),closeBottom=b=>(b.h-b.c)/range(b);
-  const bull=b=>b.c>b.o,bear=b=>b.c<b.o;
-  const bullRej=(b)=>bull(b)&&lower(b)>=body(b)*1.15&&closeTop(b)>=0.62&&bodyPct(b)>=0.25;
-  const bearRej=(b)=>bear(b)&&upper(b)>=body(b)*1.15&&closeBottom(b)>=0.62&&bodyPct(b)>=0.25;
-  const bullEngulf=bull(c1)&&bear(c2)&&c1.o<=c2.c&&c1.c>=c2.o&&body(c1)>=body(c2)*0.9;
-  const bearEngulf=bear(c1)&&bull(c2)&&c1.o>=c2.c&&c1.c<=c2.o&&body(c1)>=body(c2)*0.9;
-  const bullFollow=bull(c1)&&bull(c2)&&c1.c>c2.c&&c2.c>c3.c;
-  const bearFollow=bear(c1)&&bear(c2)&&c1.c<c2.c&&c2.c<c3.c;
-  const bull2=(bull(c1)&&bull(c2)&&c1.c>c2.o)||(bull(c1)&&bull(c2)&&c1.c>c2.c);
-  const bear2=(bear(c1)&&bear(c2)&&c1.c<c2.o)||(bear(c1)&&bear(c2)&&c1.c<c2.c);
-  const bullBreak=c1.c>c2.h;
-  const bearBreak=c1.c<c2.l;
-  const bullReversal=bullRej(c2)&&bull(c1)&&bullBreak;
-  const bearReversal=bearRej(c2)&&bear(c1)&&bearBreak;
-  const pullbackBuy=trend==='BUY' && e5!=null && c1.c>=e5 && c2.l<=e5*1.0005;
-  const pullbackSell=trend==='SELL' && e5!=null && c1.c<=e5 && c2.h>=e5*0.9995;
-  const notExtendedBuy=e21==null||av<=0||Math.abs(c1.c-e21)<=av*1.15;
-  const notExtendedSell=e21==null||av<=0||Math.abs(c1.c-e21)<=av*1.15;
-  const spreadPct=a.ask&&a.bid&&a.lastPrice?((a.ask-a.bid)/a.lastPrice)*100:0;
-  if(spreadPct>cfg.maxSpreadPct){a.signal='WAIT';a.score=0;a.patternReason='Spread too wide';return;}
+  const bar=a.currentBar;
+  if(!bar){a.signal='WAIT';a.score=0;return;}
+  const o=Number(bar.o),p=Number(a.lastPrice||bar.c),h=Number(bar.h),l=Number(bar.l);
+  const range=Math.max(h-l,1e-9),body=Math.abs(p-o);
+  const spreadPct=a.ask&&a.bid&&p?((a.ask-a.bid)/p)*100:0;
+  if(!Number.isFinite(o)||!Number.isFinite(p)||body<=0||spreadPct>cfg.maxSpreadPct){a.signal='WAIT';a.score=0;return;}
+  const rawSide=p>o?'BUY':'SELL';
+  const bodyPct=body/range;
+  const oppositeWick=rawSide==='BUY'?(h-p):(p-l);
+  const wickRatio=body>0?oppositeWick/body:999;
+  const closeLocation=rawSide==='BUY'?(p-l)/range:(h-p)/range;
 
-  // No new signal more than once per completed candle.
-  const barKey=c1.t;
-  if(a.scalpSignalBarT===barKey){return;}
-  a.scalpSignalBarT=barKey;
-
-  // Primary continuation setups: trade with the established structure.
-  let buyScore=0,sellScore=0,buyReasons=[],sellReasons=[];
-  if(trend==='BUY') {buyScore+=20;buyReasons.push('EMA5/13 trend');}
-  if(trend==='SELL'){sellScore+=20;sellReasons.push('EMA5/13 trend');}
-  if(slow==='BUY'){buyScore+=12;buyReasons.push('EMA21/50 structure');}
-  if(slow==='SELL'){sellScore+=12;sellReasons.push('EMA21/50 structure');}
-  if(bullFollow||bull2){buyScore+=22;buyReasons.push('2-candle bullish follow-through');}
-  if(bearFollow||bear2){sellScore+=22;sellReasons.push('2-candle bearish follow-through');}
-  if(pullbackBuy){buyScore+=18;buyReasons.push('EMA pullback');}
-  if(pullbackSell){sellScore+=18;sellReasons.push('EMA pullback');}
-  if(bullBreak){buyScore+=10;buyReasons.push('candle high break');}
-  if(bearBreak){sellScore+=10;sellReasons.push('candle low break');}
-  if(bullEngulf){buyScore+=12;buyReasons.push('bullish engulfing');}
-  if(bearEngulf){sellScore+=12;sellReasons.push('bearish engulfing');}
-  if(bullReversal){buyScore+=24;buyReasons.push('2-candle reversal confirmation');}
-  if(bearReversal){sellScore+=24;sellReasons.push('2-candle reversal confirmation');}
-  if(r!=null){if(r>=52&&r<=70)buyScore+=6;if(r<=48&&r>=30)sellScore+=6;}
-  if(av>0){
-    if(body(c1)>=av*0.22){if(bull(c1))buyScore+=6;if(bear(c1))sellScore+=6;}
-    // Reject abnormal chase candles.
-    if(body(c1)>av*1.8){buyScore-=18;sellScore-=18;}
+  // Main candle confirmation: the active M1 candle must itself have a
+  // meaningful body, acceptable rejection and directional micro-momentum.
+  if(a.scalpLastBarT!==bar.t){
+    a.scalpLastBarT=bar.t;
+    a.scalpConfirmSide=rawSide;
+    a.scalpConfirmCount=1;
+    a.scalpLastConfirmPrice=p;
+    a.scalpPriceTrail=[p];
+    a.scalpReverseConfirmedSide=null;
+    a.scalpReverseCount=0;
+    a.scalpReverseStartPrice=null;
+    a.scalpReverseAnchorPrice=null;
+    a.scalpReverseBarT=bar.t;
+    a.scalpUpCount=0;a.scalpDownCount=0;a.scalpUpStartPrice=p;a.scalpDownStartPrice=p;
+  }else{
+    if(!Array.isArray(a.scalpPriceTrail))a.scalpPriceTrail=[];
+    a.scalpPriceTrail.push(p);
+    if(a.scalpPriceTrail.length>8)a.scalpPriceTrail.shift();
+    if(a.scalpConfirmSide===rawSide){
+      if(a.scalpLastConfirmPrice==null ||
+         (rawSide==='BUY'&&p>a.scalpLastConfirmPrice) ||
+         (rawSide==='SELL'&&p<a.scalpLastConfirmPrice)){
+        a.scalpConfirmCount=Math.min(12,(a.scalpConfirmCount||0)+1);
+        a.scalpLastConfirmPrice=p;
+      }
+    }else{
+      a.scalpConfirmSide=rawSide;
+      a.scalpConfirmCount=1;
+      a.scalpLastConfirmPrice=p;
+    }
   }
-  if(!notExtendedBuy)buyScore-=20;
-  if(!notExtendedSell)sellScore-=20;
 
-  // Counter-trend reversal requires stronger evidence: rejection + break +
-  // the second confirming candle. A single small opposite candle is never
-  // enough anymore.
-  const strongBuyReversal=bullReversal&&(!slow||slow!=='SELL'||(bull(c1)&&c1.c>c3.h));
-  const strongSellReversal=bearReversal&&(!slow||slow!=='BUY'||(bear(c1)&&c1.c<c3.l));
-  if(trend==='SELL'&&!strongBuyReversal)buyScore-=25;
-  if(trend==='BUY'&&!strongSellReversal)sellScore-=25;
+  const minBodyPct=cfg.scalpMinBodyPct||0.42;
+  const maxWick=cfg.scalpMaxOppWick||0.85;
+  const needed=Math.max(3,Number(cfg.scalpConfirmUpdates||4));
+  const minBodyAbs=Math.max(Number(cfg.scalpMinBody||0.34),0.01);
+  const av=Number(a.atr||0);
+  const atrOK=!av || body>=av*Math.max(Number(cfg.scalpMinATRFrac||0.10),0.01);
+  const bodyOK=body>=minBodyAbs && bodyPct>=minBodyPct;
+  const wickOK=wickRatio<=maxWick && closeLocation>=0.62;
+  const trail=a.scalpPriceTrail||[];
+  let momentumOK=false;
+  if(trail.length>=3){
+    const n=trail.length;
+    momentumOK=rawSide==='BUY'
+      ? trail[n-1]>trail[n-2] && trail[n-2]>=trail[n-3]
+      : trail[n-1]<trail[n-2] && trail[n-2]<=trail[n-3];
+  }
+  const confirmed=(a.scalpConfirmSide===rawSide&&a.scalpConfirmCount>=needed&&bodyOK&&wickOK&&atrOK&&momentumOK);
 
-  let side='WAIT',score=0,reason='No confirmed 2-candle setup';
-  if(buyScore>=78&&buyScore>sellScore+8){side='BUY';score=buyScore;reason=buyReasons.join(' · ');}
-  else if(sellScore>=78&&sellScore>buyScore+8){side='SELL';score=sellScore;reason=sellReasons.join(' · ');}
-  else if(Math.max(buyScore,sellScore)>=60){reason='Setup forming — needs another candle confirmation';}
+  // IMPORTANT: profitable/protected closes can flip on the SAME M1 candle
+  // even before its open/close colour changes. We therefore maintain two
+  // independent micro-direction runs: consecutive UP ticks and consecutive
+  // DOWN ticks. This lets a bullish candle produce a confirmed SELL pullback,
+  // and a bearish candle produce a confirmed BUY pullback, without making a
+  // trade from one noisy tick.
+  const reverseNeeded=Math.max(3,Number(cfg.scalpReverseUpdates||4));
+  const reverseMinMove=Math.max((av||0)*Math.max(Number(cfg.scalpReverseMinMoveATR||0.035),0.005),Math.max(minBodyAbs*(Number(cfg.scalpReverseMinBodyFrac||0.18)),0.01));
+  if(a.scalpReverseBarT!==bar.t){
+    a.scalpReverseBarT=bar.t;
+    a.scalpReverseConfirmedSide=null;
+    a.scalpUpCount=0;a.scalpDownCount=0;
+    a.scalpUpStartPrice=p;a.scalpDownStartPrice=p;
+  }
+  const prev=trail.length>1?trail[trail.length-2]:null;
+  if(prev!=null){
+    if(p>prev){
+      if((a.scalpUpCount||0)===0)a.scalpUpStartPrice=prev;
+      a.scalpUpCount=Math.min(12,(a.scalpUpCount||0)+1);
+      a.scalpDownCount=0;a.scalpDownStartPrice=p;
+    }else if(p<prev){
+      if((a.scalpDownCount||0)===0)a.scalpDownStartPrice=prev;
+      a.scalpDownCount=Math.min(12,(a.scalpDownCount||0)+1);
+      a.scalpUpCount=0;a.scalpUpStartPrice=p;
+    }
+  }
+  const upMove=Math.max(0,p-(a.scalpUpStartPrice==null?p:a.scalpUpStartPrice));
+  const downMove=Math.max(0,(a.scalpDownStartPrice==null?p:a.scalpDownStartPrice)-p);
+  const upConfirmed=(a.scalpUpCount||0)>=reverseNeeded&&upMove>=reverseMinMove&&body>0&&(upMove/body)>=Math.max(0.20,Number(cfg.scalpReverseMinBodyFrac||0.18));
+  const downConfirmed=(a.scalpDownCount||0)>=reverseNeeded&&downMove>=reverseMinMove&&body>0&&(downMove/body)>=Math.max(0.20,Number(cfg.scalpReverseMinBodyFrac||0.18));
+  if(spreadPct<=cfg.maxSpreadPct){
+    if(upConfirmed&&!downConfirmed)a.scalpReverseConfirmedSide='BUY';
+    else if(downConfirmed&&!upConfirmed)a.scalpReverseConfirmedSide='SELL';
+    else if(upConfirmed&&downConfirmed)a.scalpReverseConfirmedSide=(p>=prev?'BUY':'SELL');
+  }
 
-  a.signal=side;a.score=Math.min(99,Math.max(0,Math.round(score)));a.entryQuality=a.score;
-  a.patternReason=reason;a.patternType=side==='BUY'?'BULL_CONFIRM':side==='SELL'?'BEAR_CONFIRM':'WAIT';
-  a.regime=(trend===slow&&trend!=='WAIT')?'TREND_'+trend:trend==='WAIT'?'TRANSITION':'MIXED';
-  a.lastScalpDirection=side;
-  a.scalpConfirmedSide=side==='WAIT'?null:side;
-  a.scalpPatternReason=reason;
+  a.regime='LIVE_CANDLE_STRICT_CONFIRMED';
+  a.entryQuality=Math.round(Math.min(100,52+(a.scalpConfirmCount>=needed?16:0)+(bodyOK?10:0)+(wickOK?8:0)+(atrOK?6:0)+(momentumOK?6:0)+(a.scalpReverseConfirmedSide?8:0)+(spreadPct<=cfg.maxSpreadPct*0.5?2:0)));
+  a.signal=confirmed?rawSide:'WAIT';
+  a.score=confirmed?a.entryQuality:Math.min(69,a.entryQuality);
+  a.lastScalpDirection=rawSide;
+  a.scalpConfirmedSide=confirmed?rawSide:null;
 }
 function maybeTradeLiveScalper(a){
   if(a.tradingEnabled===false||!a.dataReady)return;
-  const now=Date.now();
-  if(a.scalpCooldownUntil&&now<a.scalpCooldownUntil)return;
-  const pos=a.positions[0];
-  if(pos)return;
-  if(!state.paper&&a.orderPending&&now-a.orderPendingAt<8000)return;
-  // Every fresh scalping entry needs a NEW completed-candle confirmation.
-  // There is deliberately no same-candle forced reversal anymore.
-  if(a.scalpWaitBarsAfterClose>0)return;
-  if(a.lastTradeAt&&now-a.lastTradeAt<90000)return;
-  const side=a.signal;
-  if(side!=='BUY'&&side!=='SELL')return;
-  if(!a.scalpConfirmedSide||a.score<78)return;
-  if(executeTrade(a,side)){
-    a.scalpLastEntrySide=side;
-    a.scalpPeakFloating=0;a.scalpProfitLockArmed=false;
-    log('SMART SCALP '+side+' confirmed on '+a.label+' — '+(a.scalpPatternReason||'2-candle structure/candle confirmation')+'.');
-  }
-}
+  const now=Date.now(), side=a.signal, pos=a.positions[0];
+  if(!pos){
+    if(!state.paper&&a.orderPending&&now-a.orderPendingAt<8000)return;
+    if(a.lastTradeAt&&now-a.lastTradeAt<150)return;
+    if(a.lastCloseAt&&now-a.lastCloseAt<150)return;
 
+    // After a profitable/protected close the scalper is explicitly in
+    // OPPOSITE-ONLY mode. It never reopens the just-closed side merely because
+    // the M1 candle kept the same colour. The opposite side may be confirmed
+    // by the candle's micro-pullback while the same candle is still forming.
+    if(a.scalpPendingMode==='OPPOSITE_CONFIRMED'){
+      const wanted=a.scalpPendingSide;
+      if(wanted&&a.scalpReverseConfirmedSide===wanted){
+        if(executeTrade(a,wanted)){
+          a.scalpFlipPending=false;a.scalpPendingSide=null;a.scalpPendingMode=null;
+          a.scalpPeakFloating=0;a.scalpProfitLockArmed=false;
+          log('Scalper IMMEDIATE SAME-CANDLE FLIP — confirmed '+wanted+' pullback after profitable close on '+a.label+'.');
+        }
+      }
+      return;
+    }
+    if(side!=='BUY'&&side!=='SELL')return;
+    if(!a.scalpConfirmedSide)return;
+    if(executeTrade(a,a.scalpConfirmedSide)){
+      a.scalpFlipPending=false;a.scalpPendingSide=null;a.scalpPendingMode=null;
+      a.scalpPeakFloating=0;a.scalpProfitLockArmed=false;
+    }
+    return;
+  }
+
+  // Never flip a losing position merely because a signal changed. Profit
+  // protection / configured SL remains the authority for risk on the open leg.
+  if(pos.side===side)return;
+  const closeable=liveScalpClosePnL(a,pos);
+  if(closeable<=0||pos.closePending)return;
+  // A profitable signal flip is only acted on when the opposite micro-pullback
+  // is genuinely confirmed on the same M1 candle.
+  if(a.scalpReverseConfirmedSide!== (pos.side==='BUY'?'SELL':'BUY'))return;
+  a.scalpFlipPending=true;
+  a.scalpPendingSide=pos.side==='BUY'?'SELL':'BUY';
+  a.scalpPendingMode='OPPOSITE_CONFIRMED';
+  log('Scalper STRICT SAME-CANDLE FLIP — '+pos.side+' -> '+a.scalpPendingSide+'; opposite micro-pullback confirmed. Closing profitable position and queueing immediate opposite execution.');
+  realOrPaperCloseForScalp(a,pos);
+}
 function realOrPaperCloseForScalp(a,pos){
   if(!pos)return;
   if(pos.paper){
@@ -2760,43 +2754,791 @@ function checkLiveScalperExit(a){
   const floating=liveScalpClosePnL(a,pos);
   if(a.scalpPeakFloating==null||floating>a.scalpPeakFloating)a.scalpPeakFloating=floating;
 
-  // Scalping default: NEVER use the tiny legacy $0.38/$0.08 micro-lock.
-  // The broker-side SL/TP sent by realOpen() is the primary exit protection.
-  // Optional profit protection must be explicitly enabled by cfg.profitProtect
-  // and must survive two consecutive adverse executable checks while still
-  // positive. This prevents a one-tick wiggle from banking tiny profits and
-  // immediately reversing into a loss.
-  if(cfg.profitProtect){
-    const arm=Math.max(0.50,Number(cfg.gridProfitLockArm)||0.50);
-    const giveback=Math.max(0.15,Number(cfg.gridProfitLockGiveback)||0.15);
-    if(!a.scalpProfitLockArmed&&a.scalpPeakFloating>=arm){
-      a.scalpProfitLockArmed=true;a.scalpProtectHits=0;
-      log('🔒 Scalper profit protection ARMED at +$'+arm.toFixed(2)+' on '+a.label+'; broker TP/SL remain primary exits.');
-    }
-    if(a.scalpProfitLockArmed&&floating>0&&floating<=a.scalpPeakFloating-giveback){
-      a.scalpProtectHits=(a.scalpProtectHits||0)+1;
-      if(a.scalpProtectHits>=2){
-        log('Scalper profit protection confirmed — banking '+fmtPnL(floating)+' on '+a.label+'. No automatic opposite entry.');
-        realOrPaperCloseForScalp(a,pos);
-        a.scalpCooldownUntil=Date.now()+120000;
-        a.scalpWaitBarsAfterClose=2;
-        a.scalpProfitLockArmed=false;a.scalpPeakFloating=0;
-        return;
-      }
-    }else if(floating>a.scalpPeakFloating-giveback){
-      a.scalpProtectHits=0;
-    }
+  // Scalping uses the SAME protection thresholds as Grid, so the two
+  // strategies do not have contradictory risk behavior.  With the default
+  // settings this means arm at +$0.75 and protect after a $0.25 giveback,
+  // while still refusing to close at <= $0 executable PnL.
+  const {arm,giveback}=profitProtectionSettings();
+  if(cfg.gridProfitLock&&!a.scalpProfitLockArmed&&a.scalpPeakFloating>=arm){
+    a.scalpProfitLockArmed=true;
+    log('🔒 Scalper profit protection ARMED at configured +$'+arm.toFixed(2)+' on '+a.label+' (peak reached +$'+a.scalpPeakFloating.toFixed(2)+') — giveback exactly $'+giveback.toFixed(2)+' from the peak; protection will never close a negative PnL.');
+  }
+  // Giveback is a MAXIMUM retreat from the highest executable profit seen
+  // after arming — it is NOT a level to return to. Example: arm=$0.38,
+  // giveback=$0.08, peak=$0.80 => protected floor=$0.72. The trade must
+  // never be allowed to drift all the way back to $0.38. If giveback is
+  // configured as $0.00, the first adverse executable tick after arming
+  // triggers the close (no profit is intentionally given back).
+  const protectedFloor=a.scalpPeakFloating-giveback;
+  if(cfg.gridProfitLock&&a.scalpProfitLockArmed&&floating>0&&floating<=protectedFloor){
+    if(!pos||pos.closePending)return;
+    a.scalpFlipPending=true;
+    // Protection close = bank the peak, then prepare an OPPOSITE-ONLY entry.
+    // The opposite side is allowed on this very same M1 candle, but only after
+    // the independent micro-pullback confirmation has passed. This prevents
+    // repeated same-side entries after a protected close while still matching
+    // the rapid alternating arrows shown in the reference screenshots.
+    a.scalpPendingMode='OPPOSITE_CONFIRMED';
+    a.scalpPendingSide=pos.side==='BUY'?'SELL':'BUY';
+    log('Scalper profit protection — banking '+fmtPnL(floating)+' on '+a.label+'; next trade is OPPOSITE-ONLY and will fire immediately when the same-candle pullback confirms '+a.scalpPendingSide+'.');
+    realOrPaperCloseForScalp(a,pos);
+    return;
   }
   const oldest=Math.min(...a.positions.map(p=>p.openedAt||Date.now()));
-  if(cfg.maxHoldMin>0&&Date.now()-oldest>cfg.maxHoldMin*60000){
-    if(pos&&!pos.closePending){
-      log('Scalper max hold reached on '+a.label+' — closing.');
-      realOrPaperCloseForScalp(a,pos);
-      a.scalpCooldownUntil=Date.now()+120000;a.scalpWaitBarsAfterClose=2;
-    }
+  if(Date.now()-oldest>cfg.maxHoldMin*60000){
+    const pos=a.positions[0];
+    if(pos&&!pos.closePending){log('Scalper max hold reached on '+a.label+' — closing.');realOrPaperCloseForScalp(a,pos);}
   }
 }
 
+function computeConfluenceSignal(a){
+  if(!a.dataReady||!a.lastPrice){a.signal='WAIT';a.score=0;return;}
+  const higherLen=tfBars(a,cfg.tf).length;
+  const trend=a.emaTrend&&higherLen?a.lastPrice>a.emaTrend?'BUY':'SELL':'WAIT';
+  const setup=a.emaFast&&a.emaSlow?(a.emaFast>a.emaSlow?'BUY':a.emaFast<a.emaSlow?'SELL':'WAIT'):'WAIT';
+  const momDir=a.momentum>0.004?'BUY':a.momentum<-0.004?'SELL':'WAIT';
+  const rsiOk=a.rsi!=null?!(trend==='BUY'&&a.rsi>75)&&!(trend==='SELL'&&a.rsi<25):true;
+  const spreadPct=a.ask&&a.bid&&a.lastPrice?((a.ask-a.bid)/a.lastPrice)*100:0;const spreadOk=spreadPct<=cfg.maxSpreadPct;
+  // FIX: there was no overreach guard at all — this let the engine fire a BUY
+  // after price had already run far above the higher-timeframe EMA it uses
+  // as its trend bias (or a SELL far below it), i.e. entering after most of
+  // the move already happened, exactly what "buys when the market has gone
+  // far" describes. Require price to still be within a reasonable distance
+  // (in ATR terms) of that trend EMA — the same "don't chase the candle"
+  // idea used elsewhere in these bots.
+  const extensionATR=a.atr>0&&a.emaTrend?Math.abs(a.lastPrice-a.emaTrend)/a.atr:0;
+  const notExtended=extensionATR<=2.5;
+  let score=0,dir='WAIT';
+  if(trend!=='WAIT'&&trend===setup&&notExtended){score=40;dir=trend;if(momDir===dir)score+=20;if(rsiOk)score+=15;if(spreadOk)score+=15;if(Math.abs(a.momentum)>0.008)score+=10;}
+  a.signal=dir;a.score=Math.min(100,score);
+  // FIX: this used to bump the streak on every single price tick that kept
+  // agreeing with the last direction. On a fast-ticking symbol like
+  // BTC/USDT that inflated into the hundreds within about a minute (401 ->
+  // 609 -> 710 in ~90 seconds) — meaningless as a confirmation count, and it
+  // let maybeTrade's streak>=2 gate satisfy itself almost instantly after a
+  // signal flipped. Only count it once per newly-closed 1-minute bar that
+  // still agrees with the direction, so "streak" means consecutive candles
+  // the way the dashboard label implies, not consecutive network messages.
+  const barKey=a.currentBar?a.currentBar.t:null;
+  if(dir!=='WAIT'&&a.lastDir===dir){
+    if(barKey!=null&&barKey!==a.lastStreakBarTime){a.streak++;a.lastStreakBarTime=barKey;}
+  }else{
+    a.lastDir=dir;a.streak=dir==='WAIT'?0:1;a.lastStreakBarTime=barKey;
+  }
+}
+
+// EMA 5/13/89 strategy, ported from our tested build. EMA5 = fastest reaction,
+// EMA13 = confirmation (5-crosses-back-over-13 is the entry trigger), EMA89 =
+// trend filter (both 5 and 13 must be on the same side of it). A pullback is
+// EMA5/EMA13 coming close together or briefly crossing to the opposite side —
+// NOT price touching EMA89. Uses whatever timeframe is picked in Settings
+// (cfg.tf), same as every other strategy here.
+function computeEmaSignal(a){
+  const bars=tfBars(a,cfg.tf);
+  const closes=bars.map(x=>x.c);
+  if(closes.length<95){a.signal='WAIT';a.score=0;a.emaWarmup=closes.length+'/95 bars';return;}
+  const e5=ema(closes,5),e13=ema(closes,13),e89=ema(closes,89);
+  const e5p=ema(closes.slice(0,-1),5),e13p=ema(closes.slice(0,-1),13);
+  if(e5==null||e13==null||e89==null||e5p==null||e13p==null){a.signal='WAIT';a.score=0;return;}
+  a.ema5=e5;a.ema13=e13;a.ema89=e89;
+  let trend='WAIT';
+  if(e5>e89&&e13>e89)trend='BUY';else if(e5<e89&&e13<e89)trend='SELL';
+  a.emaState=a.emaState||{trend:'WAIT',pullback:false};
+  const st=a.emaState;
+  if(trend!==st.trend){st.trend=trend;st.pullback=false;}
+  const gap=Math.abs(e5-e13);
+  const closeEnough=gap<=closes[closes.length-1]*0.0006;
+  const oppositeCross=trend==='BUY'?(e5<=e13):trend==='SELL'?(e5>=e13):false;
+  if(trend!=='WAIT'&&(closeEnough||oppositeCross))st.pullback=true;
+  const bar=bars[bars.length-1];const range=bar.h-bar.l;
+  const bodyOk=range>0&&(trend==='BUY'?(bar.c>bar.o&&(bar.c-bar.o)>=range*0.4):trend==='SELL'?(bar.c<bar.o&&(bar.o-bar.c)>=range*0.4):false);
+  const crossBack=trend==='BUY'?(e5p<=e13p&&e5>e13):trend==='SELL'?(e5p>=e13p&&e5<e13):false;
+  const entryOK=trend!=='WAIT'&&st.pullback&&crossBack&&bodyOk;
+  a.dataReady=true;
+  a.signal=entryOK?trend:'WAIT';a.score=entryOK?100:0;
+  a.streak=entryOK?2:0; // EMA entries are event-triggered (fresh cross), not accumulated over ticks like the confluence engine — satisfy maybeTrade's streak>=2 gate directly
+  if(entryOK)st.pullback=false; // consumed — wait for the next pullback before firing again
+}
+// Ride mode has no fixed profit target — it holds until EMA5+EMA13 break
+// cleanly back through EMA89 (the trend it was riding is gone). Called from
+// checkExits() instead of the basket-profit check for that one style.
+function checkEmaTrendFlipExit(a){
+  if(cfg.strategy!=='emaRide'||!a.positions.length)return;
+  const pos=a.positions[0];
+  const trendNow=a.emaState?a.emaState.trend:'WAIT';
+  if(trendNow!==pos.side){log('EMA trend flip — closing ride position on '+a.label+'.');closeAllPositions(a);}
+}
+
+// ========== TRADING LOGIC ==========
+function maybeTrade(a){
+  // Scalping Two deliberately bypasses the normal confirmation/reversal
+  // machinery. Its direction is the active M1 candle itself.
+  if(cfg.strategy==='scalping2'){
+    maybeTradeLiveScalper(a);
+    return;
+  }
+  // FIX #14 (continued) — a deactivated asset (switched away from) must
+  // never open a new trade again, no matter what stray tick still reaches
+  // this function.
+  if(a.tradingEnabled===false)return;
+  // FIX #8 (continued) — consume a queued forced re-entry (Flip's every
+  // cycle, Scalping's same-candle reversal after a profitable close) as
+  // soon as this tick sees the position slot is actually empty. This is the
+  // "next tick" half of FIX #8 above: no setTimeout, no dependency on the
+  // tab being foregrounded at a specific instant — it just fires the moment
+  // a real price tick comes through and a.positions is clear, same as every
+  // other trade decision in this function. Takes priority over everything
+  // else below and deliberately skips the streak/signal gate, since the
+  // whole point is reacting immediately, not waiting for reconfirmation.
+  if(a.forceNextSide&&!a.positions.length){
+    // FIX #10 ("flip fires once then sits forever"): this used to clear
+    // a.forceNextSide unconditionally, then call executeTrade(). If that
+    // attempt was rejected for any transient, self-correcting reason — the
+    // in-flight order lock still cooling down, the symbol not quite loaded,
+    // a momentary sanity-check block — the queued reversal was thrown away
+    // with no way back in, and the whole flip cycle just stopped dead after
+    // exactly one round, with nothing in the log to explain why. Now it only
+    // clears once executeTrade() confirms the order actually went out;
+    // otherwise it stays queued and simply retries on the very next tick.
+    const side=a.forceNextSide;
+    // FIX #20 (continued) — carry the fake-leg tag through to whichever
+    // fill handler actually builds the position object (paperOpen fills
+    // synchronously; a real fill arrives later via onExec) so it can mark
+    // that specific position, not the asset generally.
+    a.pendingIsFakeLeg=!!a.forceNextSideIsFakeLeg;
+    // FIX (real, destructive bug: bot opening BOTH directions at once,
+    // then rapid-fire "profit-lock" closes for pennies over and over,
+    // burning the account instead of growing it): a forced reversal fires
+    // straight through executeTrade(), which — unlike a normal grid round
+    // opened by maybeTradeGrid — never reset the round's own bookkeeping
+    // (gridSide, gridPeakFloating, gridProfitLockArmed, gridTargetLevel).
+    // So a.gridSide stayed stuck on whatever the ORIGINAL round's side
+    // was, forever — meaning every later close computed the wrong
+    // "opposite" direction and kept reversing the same way over and over.
+    // And a.gridPeakFloating carried over from the PREVIOUS round's peak,
+    // so the profit-lock's giveback math was being checked against a
+    // stale, unrelated high — arming and triggering almost the instant
+    // the new position opened, for pennies, repeatedly. This resets grid's
+    // per-round state exactly like a normal fresh round does, so a forced
+    // reversal is bookkept identically to one maybeTradeGrid opened
+    // itself.
+    if(cfg.strategy==='grid'){
+      a.gridPeakFloating=0;
+      a.gridProfitLockArmed=false;
+      a.gridSide=side;
+      a.gridTargetLevel=Math.min(a.gridLevel||1,cfg.gridMaxLevels||6);
+    }
+    if(executeTrade(a,side)){a.forceNextSide=null;a.forceNextSideIsFakeLeg=false;}
+    return;
+  }
+  // Grid / Ladder Scalping manages its own batch size and shared exit
+  // target (see maybeTradeGrid/checkGridExit) instead of the single-entry,
+  // streak-gated flow every other strategy below uses.
+  if(cfg.strategy==='grid'){maybeTradeGrid(a);return;}
+  // Scalping Two reacts on its first candle (fast, event-triggered timing);
+  // the EMA styles are event-triggered too (see computeEmaSignal, which sets
+  // a.streak directly). Kept here for the scalping2 case specifically.
+  const streakNeeded=cfg.strategy==='scalping2'?1:2;
+  if(!a.dataReady||a.signal==='WAIT'||a.streak<streakNeeded)return;
+  const now=Date.now();
+  const tradeCooldown=cfg.strategy==='scalping2'?Math.min(Math.max(cfg.cooldownSec||5,1),5):(cfg.cooldownSec||60);
+  if(a.lastCloseAt&&now-a.lastCloseAt<tradeCooldown*1000)return;
+  if(a.lastTradeAt&&now-a.lastTradeAt<tradeCooldown*1000)return;
+  const hasPos=a.positions.length>0;
+  const sameDir=hasPos&&a.positions[0].side===a.signal;
+  if(hasPos&&sameDir)return;
+  // FIX ("still closing below my tp and even below my sl... follow my
+  // setup always, in all strategies"): this used to call
+  // closeAllPositions() the INSTANT the signal flipped direction, for
+  // every single strategy, no exceptions. On a fast-moving symbol like
+  // XAU/USD on a scalping timeframe, the signal can flip back and forth
+  // almost every tick — your own log shows it: open, closed 40 seconds
+  // later for -0.34, open again, closed for +0.07, open again... none of
+  // those tiny amounts are your real $8 stop or your real basket-profit
+  // target, because this was closing the trade for an unrelated reason
+  // (the signal changed its mind) before price ever got anywhere near
+  // either one. That's on top of the earlier fix that stopped a separate
+  // system from racing the broker's own TP — this was a second, different
+  // system doing the same kind of damage. A held position now ONLY ever
+  // closes for one of three real reasons: it hits the take-profit you
+  // configured, it hits the stop-loss you configured, or it hits your Max
+  // Hold Time — all still fully active below and in checkExits/checkTrail,
+  // completely untouched. If the signal flips while a position is open,
+  // the bot now just leaves that position alone and waits — it simply
+  // won't open a NEW trade in the old direction (sameDir check above
+  // already prevents that). Once the open position actually closes on its
+  // own real TP/SL/max-hold, the next tick is free to open fresh in
+  // whatever direction the signal is showing by then.
+  // FIX ("the scalping should follow the signal as it scalps, not this
+  // calling a buy signal a sell signal and it ends up making losses"):
+  // this only ever checked the signal's DIRECTION, never whether the
+  // candle actually backing that signal was a real, decisive move or a
+  // weak flicker about to reverse — exactly what let scalping2 open on a
+  // signal that flipped again a minute later. Now reuses the same
+  // candle-pattern confirmation grid's reversal logic already uses (see
+  // candleConfirms below): real body, no rejection wick against it.
+  if(!hasPos&&!isMomentumFadingAgainst(a,a.signal)&&(cfg.strategy==='scalping2'?liveCandleConfirms(a,a.signal):candleConfirms(a,a.signal))){
+    a.gridPeakFloating=0; // fresh basket — profit-lock tracks from zero again
+    a.gridProfitLockArmed=false;
+    executeTrade(a,a.signal);
+  }
+}
+// Was a Scalping-only momentum-fade guard; Scalping (the original preset)
+// has been removed, so this is now a permanent no-op kept for maybeTrade's
+// call site.
+function isMomentumFadingAgainst(a,side){
+  return false;
+}
+// Grid / Ladder Scalping's entry — ported from Pepperstone's openGridBatch,
+// adapted to Morgan's per-asset position array. A round is a.gridTargetLevel
+// positions, opened ONE PER TICK (same in-flight-safe pacing every other
+// stacking here already uses — see maybeAddStackLeg) rather than a tight
+// synchronous loop, since firing several real orders back-to-back in one
+// tick would hit executeTrade()'s own in-flight lock and silently drop every
+// leg after the first. Paper mode still effectively completes a round almost
+// instantly since paperOpen() is synchronous with no such lock.
+// checkGridExit() below watches the round's shared floating P&L and closes
+// them all together once the target/drawdown/profit-lock fires.
+function gridStepFor(a){
+  const bars=tfBars(a,1);
+  const av=atr(bars,14);
+  const regime=adaptiveRegime(a);
+  // Wider spacing as volatility rises. In a transition we widen slightly;
+  // in a clean range we keep the ladder tighter.
+  const mult=regime==='RANGE'?0.50:(regime==='TRANSITION'?0.70:0.90);
+  if(av&&Number.isFinite(av)&&av>0)return av*mult;
+  const vol=volumeFor(a,effectiveLotSize());
+  const fixed=cfg.slDollars/dollarPerUnitFor(vol,a);
+  return Math.max(fixed*0.40,0);
+}
+function maybeTradeGrid(a){
+  if(a.tradingEnabled===false)return;
+  const maxLevels=Math.max(1,Math.min(cfg.gridMaxLevels||6,20));
+  if(!a.gridLevel)a.gridLevel=1;
+
+  if(a.positions.length){
+    const regime=adaptiveRegime(a);
+    // Do not average down forever against a confirmed directional move.
+    // Existing positions remain managed by the normal exit engine; only NEW
+    // grid legs are blocked here.
+    if(regime==='EXTREME')return;
+    if((regime==='TREND_UP'&&a.gridSide==='SELL')||(regime==='TREND_DOWN'&&a.gridSide==='BUY')){
+      log('Grid: trend escape on '+a.label+' — '+regime+' detected against '+a.gridSide+' ladder; no additional levels.');
+      return;
+    }
+    // TRUE GRID/LADDER: after level 1, add the next same-direction leg when
+    // price moves AGAINST the basket by one grid spacing. It no longer waits
+    // for the first position to become profitable, and it no longer treats
+    // "target level = 1" as permission to stop forever.
+    if(a.positions.length>=maxLevels)return;
+    if(!a.gridSide)a.gridSide=a.positions[0].side;
+    if(!a.gridTargetLevel)a.gridTargetLevel=maxLevels;
+    if(!state.paper&&a.orderPending&&Date.now()-a.orderPendingAt<8000)return;
+    const step=gridStepFor(a);
+    if(!(step>0))return;
+    const lastLeg=a.positions[a.positions.length-1];
+    const anchor=a.gridLastAddPrice||lastLeg.entryPrice;
+    const adverse=a.gridSide==='BUY'?(anchor-a.lastPrice):(a.lastPrice-anchor);
+    if(adverse<step)return;
+    if(a.lastGridAddAt&&Date.now()-a.lastGridAddAt<750)return;
+    if(executeTrade(a,a.gridSide)){
+      a.lastGridAddAt=Date.now();
+      a.gridNextStepPrice=a.lastPrice;
+      log('Grid: level '+Math.min(a.positions.length+1,maxLevels)+' queued on '+a.label+' after '+(a.gridSide==='BUY'?'down':'up')+' '+step.toFixed(digitsFor(a))+' price spacing.');
+    }
+    return;
+  }
+
+  if(!a.dataReady||a.signal==='WAIT'||a.streak<1)return;
+  if(!candleConfirms(a,a.signal))return;
+  const hiBar=cfg.tf===1?a.currentBar:a['hi'+cfg.tf];
+  const curBarT=hiBar?hiBar.t:null;
+  if(curBarT==null||curBarT===a.lastEntryBarT)return;
+  const now=Date.now();
+  const tradeCooldown=cfg.cooldownSec||5;
+  if(a.lastCloseAt&&now-a.lastCloseAt<tradeCooldown*1000)return;
+  if(a.lastTradeAt&&now-a.lastTradeAt<tradeCooldown*1000)return;
+  const level=1;
+  a.gridLevel=1;
+  a.gridPeakFloating=0;
+  a.gridProfitLockArmed=false;
+  a.gridSide=a.signal;
+  a.gridTargetLevel=maxLevels;
+  a.gridLastAddPrice=a.lastPrice;
+  a.lastGridAddAt=0;
+  a.lastEntryBarT=curBarT;
+  log('Grid: opening level 1/'+maxLevels+' on '+a.label+' — '+a.signal+' ladder; spacing '+gridStepFor(a).toFixed(digitsFor(a))+', batch target scales with positions.');
+  executeTrade(a,a.signal);
+}
+// ---------------------------------------------------------------
+// GRID/SCALPING REACT-TO-CLOSE — native to the bot, runs on every close
+// whether or not AI Autopilot's master switch is even on. Auto ON alone
+// is enough.
+// FIX ("it should flip on the right signals... grid confirms the trend
+// with the help of AI, no guesswork"): this used to decide the next
+// direction by blindly assuming the opposite side after a profit-lock
+// close, and by asking only a separate BOS-structure read after a clean
+// TP — never the bot's own live, indicator-confirmed signal (a.signal),
+// which is the actual "is this a real BUY or SELL right now" read every
+// normal round already trusts to open a fresh position. Now BOTH close
+// reasons do the same thing: re-check a.signal right now. If it's a
+// clear BUY or SELL, fire that exact direction immediately — continuing
+// the same side if the live signal still agrees, flipping if it now
+// says the other way. If the signal has gone to WAIT, this does NOT sit
+// idle — per request, it keeps trading off the last closed candle's own
+// direction (a real, fast price-reaction read, weaker than a full
+// confirmed signal on purpose) so it's never doing nothing while it
+// waits for a proper signal to reappear.
+// Ghost Mode (AI Autopilot, opt-in) overrides this with its own simpler
+// "always alternate, no confirmation at all" behavior — it only takes
+// over when Master switch + Ghost Mode are both explicitly on.
+// A stop-out / max-drawdown close never reaches this function — firing
+// back into the market right after a real loss with no signal is
+// revenge-trading, not strategy.
+// ---------------------------------------------------------------
+// FIX ("it should not sit idle if the signal goes to WAIT — it should
+// keep trading according to candle trend and price reaction while it
+// waits for the signal"): a real fallback for the moments between
+// confirmed signals — reads the last fully closed 1m candle's own
+// direction (close vs open) as a fast, genuine price-reaction read. It's
+// a weaker, faster read than a.signal on purpose (a single candle, no
+// streak or indicator confirmation) — used only to keep the round active
+// during a WAIT gap, never presented as a full confirmed signal.
+function priceReactionSide(a){
+  const bars=a.bars1;
+  if(!bars||!bars.length)return null;
+  const c=bars[bars.length-1];
+  if(!c)return null;
+  if(c.c>c.o)return 'BUY';
+  if(c.c<c.o)return 'SELL';
+  return null;
+}
+// FIX ("entering the market blindly when it's already moved on, without
+// confirming the candle patterns"): with the AI Autopilot master switch
+// off, none of the zone/structure protections built into that module
+// ever ran — this native grid logic had zero check on whether the
+// candle itself actually still supports firing that direction, so it
+// kept chasing a move right as it was already exhausting and reversing.
+// This is a real, native (no AI Zone dependency) candle-pattern check:
+// the last CLOSED candle must (1) actually close in the direction being
+// fired, (2) have a real body — not a tiny, indecisive candle — at
+// least 35% of its full high-low range, and (3) not show a long wick
+// AGAINST that direction (a long upper wick on a bearish candle, or a
+// long lower wick on a bullish one, is classic rejection — price
+// pushed further that way and got shoved back, which is exactly the
+// "already moved on and reversing" pattern from your screenshot).
+// Live-candle confirmation used only by Scalping Two. Unlike candleConfirms(),
+// this deliberately reads currentBar so the strategy can enter while the M1
+// candle is still forming. It never reverses a bullish live candle into SELL
+// or a bearish live candle into BUY.
+function liveCandleConfirms(a,side){
+  const c=a.currentBar;
+  if(!c)return false;
+  const o=Number(c.o),h=Number(c.h),l=Number(c.l),p=Number(a.lastPrice||c.c);
+  const range=Math.max(h-l,1e-9);
+  const body=Math.abs(p-o);
+  if(body<range*0.12)return false;
+  if(side==='BUY'){
+    if(p<=o)return false;
+    const upperWick=h-p;
+    return upperWick<=body*1.5;
+  }
+  if(side==='SELL'){
+    if(p>=o)return false;
+    const lowerWick=p-l;
+    return lowerWick<=body*1.5;
+  }
+  return false;
+}
+function candleConfirms(a,side){
+  const bars=a.bars1;
+  if(!bars||bars.length<1)return false;
+  const c=bars[bars.length-1];
+  if(!c)return false;
+  const range=c.h-c.l; if(range<=0)return false;
+  const body=Math.abs(c.c-c.o);
+  if(body<range*0.35)return false; // too small/indecisive to trust
+  if(side==='BUY'){
+    if(c.c<=c.o)return false; // candle itself isn't even bullish
+    const lowerWick=Math.min(c.o,c.c)-c.l;
+    return lowerWick<=body*0.6; // no long rejection wick below
+  }
+  if(side==='SELL'){
+    if(c.c>=c.o)return false;
+    const upperWick=c.h-Math.max(c.o,c.c);
+    return upperWick<=body*0.6; // no long rejection wick above
+  }
+  return false;
+}
+function gridReactToClose(a,closedSide,reason){
+  if(!closedSide)return;
+  if(typeof AIZone!=='undefined'&&AIZone.cfg&&AIZone.cfg.masterOn&&AIZone.cfg.ghostMode){
+    AIZone.reactToClose(a,closedSide,reason);
+    return;
+  }
+  const why=reason==='protect'?'profit-lock pullback':'target hit';
+  if(a.signal==='BUY'||a.signal==='SELL'){
+    if(!candleConfirms(a,a.signal)){
+      log('Grid: '+why+' on '+a.label+' — live signal says '+a.signal+' but the last candle doesn\u2019t confirm it (too small or shows rejection), waiting for real confirmation.');
+      return;
+    }
+    a.forceNextSide=a.signal;a.forceNextSideIsFakeLeg=true;
+    const verb=(a.signal===closedSide)?'continuing':'flipping to';
+    log('Grid: '+why+' on '+a.label+' — live signal AND the candle itself confirm '+a.signal+', '+verb+' '+a.signal+' immediately.');
+  }else{
+    const reaction=priceReactionSide(a);
+    if(reaction&&candleConfirms(a,reaction)){
+      a.forceNextSide=reaction;a.forceNextSideIsFakeLeg=true;
+      log('Grid: '+why+' on '+a.label+' — no confirmed signal yet, but the last candle itself confirms '+reaction+', firing '+reaction+' while it waits for a real signal.');
+    }else{
+      log('Grid: '+why+' on '+a.label+' — no clear signal, and the last candle doesn\u2019t confirm a direction either, waiting.');
+    }
+  }
+}
+// tight loop at the same price — that's just one oversized trade split into N
+// tickets, not real stacking, and it multiplies risk instantly with zero
+// confirmation that the move is actually working. Ported from our tested
+// build instead: open exactly 1, then add another only once the most recent
+// one is already +0.5R in profit, up to the configured count — so risk only
+// grows as the trade proves itself.
+async function checkClientLicense(){
+  const api=localStorage.getItem('seriesx_license_api')||SERIESX_LICENSE_API_DEFAULT;
+  const clientId=localStorage.getItem('seriesx_client_id')||state.accountId||'';
+  if(!api)return {ok:true,configured:false};
+  try{const r=await fetch(api.replace(/\/$/,'')+'/license?clientId='+encodeURIComponent(clientId),{cache:'no-store'});const d=await r.json();
+    if(d.status==='blocked'||d.status==='expired'||d.status==='suspended')return {ok:false,reason:d.status};
+    return {ok:true,configured:true};
+  }catch(e){return {ok:true,configured:true,unverified:true};}
+}
+function executeTrade(a,side){
+  // Series X V2 adaptive execution gate. This is deliberately placed before
+  // any broker order is sent, so a fast signal cannot bypass market-quality
+  // checks. It does not change exits or existing positions.
+  if(cfg.adaptiveEngine&&cfg.strategy!=='scalping2'){
+    const q=adaptiveEntryQuality(a,side);
+    if(!q.ok){
+      a.regime=q.regime;
+      log('Adaptive gate: '+side+' on '+a.label+' blocked — quality '+Math.round(q.score)+'/100, regime '+q.regime+'.');
+      return false;
+    }
+    a.regime=q.regime;a.entryQuality=Math.round(q.score);
+  }
+  // FIX (the cause of the 10-identical-positions pile-up on the broker):
+  // a real order is confirmed asynchronously — NEW_ORDER_REQ is sent, then
+  // some time later (a full network round trip) EXECUTION_EVENT arrives and
+  // ORDER_FILLED pushes it into a.positions. Nothing here used to account
+  // for that gap. maybeTrade() only skips re-entering once a.positions is
+  // non-empty, so on a fast cooldown (Scalping is 5s) it kept calling
+  // executeTrade() again every cooldown tick for as long as the confirmation
+  // hadn't landed yet, firing a fresh real order each time — which is
+  // exactly how 10 separate 0.01-lot BUYs ended up open on the broker at
+  // once while the bot's own state still showed zero positions. This adds
+  // a simple in-flight lock: once a real order is sent, block further real
+  // entries on this asset until either the fill confirms (cleared in onExec)
+  // or 8s pass with no response (self-heals if an event is ever dropped).
+  if(!state.paper&&a.orderPending&&Date.now()-a.orderPendingAt<8000)return false;
+  const now=Date.now();a.lastTradeAt=now;
+  // FIX: this used to log "SELL 1/3 0.01 on XAU/USD" unconditionally, even
+  // when paperOpen()/realOpen() had just refused the trade (e.g. LIVE NOT
+  // ARMED, symbol still loading, sanity-check block) — every rejection
+  // looked exactly like a successful fill in the log, with the real reason
+  // buried in a separate line above/below it. Only log success as success.
+  if(!state.paper){a.orderPending=true;a.orderPendingAt=now;}
+  const ok=state.paper?paperOpen(a,side):realOpen(a,side);
+  if(!state.paper&&!ok){a.orderPending=false;} // local rejection (not-loaded/sanity-check) — no event will ever arrive to clear it
+  if(ok)log(side+' 1/'+cfg.posPerEntry+' '+cfg.lotSize+' on '+a.label+(cfg.posPerEntry>1?' (adds more as it proves itself, +0.5R per leg)':''));
+  updateDash();
+  return ok; // FIX #10 — see forceNextSide consumer above: caller needs to
+  // know whether this actually went through before clearing a queued
+  // Flip/Scalping reversal, or a transient failure loses it forever.
+}
+function maybeAddStackLeg(a){
+  if(a.tradingEnabled===false)return; // FIX #14 (continued)
+  if(cfg.strategy==='grid')return; // Grid manages its own batch size — see maybeTradeGrid/checkGridExit
+  if(!a.positions.length||a.positions.length>=cfg.posPerEntry)return;
+  const last=a.positions[a.positions.length-1];
+  if(!last.initialRisk||last.initialRisk<=0)return;
+  const dir=last.side==='BUY'?1:-1;
+  const profitDist=(a.lastPrice-last.entryPrice)*dir;
+  if(profitDist<last.initialRisk*0.5)return;
+  if(!state.paper&&a.orderPending&&Date.now()-a.orderPendingAt<8000)return; // same in-flight lock as executeTrade()
+  if(!state.paper){a.orderPending=true;a.orderPendingAt=Date.now();}
+  const ok=state.paper?paperOpen(a,last.side):realOpen(a,last.side);
+  if(!state.paper&&!ok){a.orderPending=false;}
+  if(ok)log('Stack leg '+a.positions.length+'/'+cfg.posPerEntry+' added on '+a.label+' (prior leg reached +0.5R).');
+  updateDash();
+}
+
+// FIX — the real, root-cause guard: cTrader's lotSize/minVolume/stepVolume
+// fields are documented as "in cents," but real developer reports (checked
+// directly against cTrader's own community forum) confirm these fields
+// genuinely behave inconsistently across brokers for non-FX symbols like
+// crypto CFDs — this is not something a cleverer formula can fully guarantee
+// against. So instead of trusting the broker's raw numbers blindly, this
+// checks the RESULT against what you actually asked for (cfg.slDollars) and
+// refuses outright if they don't match within reason. This is what would have
+// stopped the $-20,569,999,989,942.76 balance: no matter which upstream field
+// was wrong, the actual dollar risk this produces could never runaway,
+// because it's validated against your own stated intent every single time.
+function sanityCheckTrade(a, vol, slDist){
+  const dollarPerUnit=dollarPerUnitFor(vol,a);
+  if(!Number.isFinite(dollarPerUnit)||dollarPerUnit<=0)return 'volume calc invalid';
+  const impliedRisk=slDist*dollarPerUnit;
+  const intended=cfg.slDollars;
+  // Generous tolerance for broker min/step rounding — but nowhere near enough
+  // to let a units-mismatch (which is typically 100x-1,000,000x+ off) through.
+  if(!Number.isFinite(impliedRisk)||impliedRisk<=0)return 'risk calc came back '+impliedRisk;
+  if(impliedRisk>Math.max(intended*5,50))return 'risk calc ($'+impliedRisk.toFixed(2)+') is way past your set SL ($'+intended+') — broker data for this symbol looks wrong, refusing rather than risking a repeat of the runaway-balance bug';
+  if(vol>lotSizeFor(a)*1000)return 'volume ('+vol+') implies over 1,000 lots for a $'+cfg.lotSize+'-lot request — refusing';
+  return null;
+}
+// ATR-based stop distance — ported from Pepperstone's getStopDistances().
+// When cfg.atrEnabled is on, this overrides the fixed $ Stop Loss with
+// atr*atrSlMult, computed fresh from the current Timeframe's bars (ATR
+// itself is already a price distance, not a dollar amount, so no
+// dollarPerUnitFor() conversion is needed here — unlike the fixed-$ path).
+// Falls back to the normal fixed-$ calc if ATR can't be computed yet
+// (not enough bars) so a trade is never blocked by this alone.
+function slDistanceFor(a,vol){
+  if(cfg.atrEnabled){
+    const bars=tfBars(a,cfg.tf);
+    const atrVal=atr(bars,cfg.atrPeriod||14);
+    if(atrVal)return atrVal*(cfg.atrSlMult||1.5);
+  }
+  return cfg.slDollars/dollarPerUnitFor(vol,a);
+}
+function paperOpen(a,side){
+  // FIX: this had no guard at all — placing a paper trade before the real
+  // symbol details (lot size, min volume, step) had loaded produced exactly
+  // the NaN volume / NaN P&L / stuck $0.00 balance bug (see isFullLoaded()
+  // above for the full root cause). Paper trades should be just as safe as
+  // real ones here, so give it the same clear, local rejection instead of a
+  // silently corrupted position.
+  if(state.broker==='ctrader'&&!isFullLoaded(a)){
+    log('Cannot trade '+a.label+' yet — still loading this symbol\'s lot-size info from the broker. Try again in a moment.');
+    return false;
+  }
+  const entry=a.lastPrice;
+  const vol=volumeFor(a,effectiveLotSize());
+  if(!Number.isFinite(vol)||vol<=0){
+    log('Cannot trade '+a.label+': lot size not ready yet (volume calc came back '+vol+'). Try again in a moment.');
+    return false;
+  }
+  const slDist=slDistanceFor(a,vol);
+  const problem=sanityCheckTrade(a,vol,slDist);
+  if(problem){log('Blocked '+a.label+' trade: '+problem+'.');return false;}
+  const sl=side==='BUY'?entry-slDist:entry+slDist;
+  // FIX #20 (continued) — tag this position if it was opened via the
+  // forced-reversal path, and record which candle it opened on, so
+  // checkExits below knows to hold it through a candle change instead of
+  // closing at the first profitable tick like a normal entry does.
+  const isFakeLeg=!!a.pendingIsFakeLeg;a.pendingIsFakeLeg=false;
+  a.positions.push({side,entryPrice:entry,volume:vol,stopLoss:sl,takeProfit:null,openedAt:Date.now(),paper:true,peakPnL:0,trailingActive:false,initialRisk:slDist,isFakeLeg,entryBarKey:a.currentBar?a.currentBar.t:null});
+  if(cfg.strategy==='grid'){a.gridSide=side;a.gridLastAddPrice=entry;a.gridLevel=a.positions.length;a.gridTargetLevel=Math.max(1,cfg.gridMaxLevels||6);}
+  return true;
+}
+
+function realOpen(a,side){
+  // FIX ("not working on my real account and demo"): this required Arm Live
+  // to be on unconditionally — including for a DEMO cTrader account, where
+  // there's no real money at risk at all. Arm Live exists to gate genuine
+  // real-money risk; gating demo behind it too meant every demo order was
+  // silently refused unless you happened to flip on a toggle that reads
+  // like it's specifically about live money. Now only actually-live trading
+  // requires it.
+  if(state.env==='live'&&!state.armed){log('Blocked: LIVE account and Arm Live is off — turn on Arm Live in Config to allow real-money orders.');return false;}
+  if(state.broker==='ctrader'){
+    const symId=a.symbolId;
+    // FIX: this is what produced "INVALID_REQUEST — missing required fields:
+    // volume" from the broker, wrongly shown to you as a token-expiry alert.
+    // volumeFor() can come back as 0/NaN when a symbol's lot-size details
+    // (a.full) haven't loaded yet — e.g. tapping BUY/SELL right after a
+    // symbol switch, before SYMBOL_BY_ID_RES arrives. Sending that broken
+    // number serializes to JSON null, which the broker reports as a missing
+    // field. Catch it here, locally, with a clear reason instead.
+    if(!symId){log('Cannot trade '+a.label+' yet — still loading this symbol from the broker. Try again in a moment.');return false;}
+    const vol=volumeFor(a,effectiveLotSize());
+    if(!Number.isFinite(vol)||vol<=0){log('Cannot trade '+a.label+': lot size not ready yet (volume calc came back '+vol+'). Try again in a moment.');return false;}
+    // FIX: NEW_ORDER_REQ takes relativeStopLoss (relative distance, fixed
+    // 1/100000-of-price-unit scale per cTrader's own API spec — confirmed by
+    // checking their proto docs directly), not an absolute "stopLoss" price
+    // field. The previous version here sent an absolute price and would very
+    // likely have been rejected or misinterpreted by the broker.
+    const digits=digitsFor(a);
+    const slDist=slDistanceFor(a,vol);
+    // Same real-money-critical guard as paperOpen — see sanityCheckTrade() for
+    // why this is validated against your own stated intent (cfg.slDollars)
+    // rather than trusting the broker's raw fields blindly.
+    const problem=sanityCheckTrade(a,vol,slDist);
+    if(problem){log('Blocked '+a.label+' REAL order: '+problem+'.');return false;}
+    // FIX ("Relative stop loss has invalid precision" on BTC/USDT): slDist
+    // was multiplied straight into the broker's fixed-point scale without
+    // ever being rounded to THIS symbol's own decimal precision first.
+    // That happened to work for XAUUSD (digits=2) by coincidence but broke
+    // on BTC/USDT, whose price precision doesn't line up the same way —
+    // the broker rejected the resulting value as landing on an invalid
+    // increment. Rounding to digitsFor(a) before scaling fixes it for any
+    // symbol, not just the one it happened to work on before.
+    const relSL=Math.round(roundToDigits(slDist,digits)*100000);
+    // FIX #13 ("TP should always land at or above what I set, not $0.37,
+    // $0.17..."): Basket Profit was only ever enforced by this client
+    // polling floatingPnL on each price tick and THEN sending a separate
+    // CLOSE_POSITION_REQ once it noticed the target was crossed — a real
+    // round trip (detect → request → broker processes) during which price
+    // can keep moving, especially on faster symbols. That gap is exactly
+    // why closes landed under the target as often as over it. Now the
+    // target is also sent to the broker itself as a real take-profit at
+    // order time (relativeTakeProfit, same 1/100000 scale as the stop-loss
+    // above) — the broker's own matching engine closes it right at that
+    // price with no client round-trip in between, so it converges on
+    // "exactly what I set, or better" the way a real take-profit order
+    // should, the same way MT5's server-side TP behaves. The client-side
+    // Basket Profit check still exists too (it also has to sum MULTIPLE
+    // stacked legs, which a single order-level TP can't do), so this is a
+    // second, faster line of defense on top of it, not a replacement.
+    // Grid manages its own shared, whole-batch exit target client-side (see
+    // checkGridExit) — sending each individual leg its own broker-side TP at
+    // cfg.basketProfit here would close legs one at a time instead of
+    // together as a round, breaking the batch semantics. Every other
+    // strategy is unchanged.
+    const tpDist=(cfg.strategy!=='grid'&&cfg.basketProfit>0)?cfg.basketProfit/dollarPerUnitFor(vol,a):0;
+    const relTP=tpDist>0?Math.round(roundToDigits(tpDist,digits)*100000):0;
+    const orderPayload={ctidTraderAccountId:state.accountId,symbolId:symId,orderType:1,tradeSide:side==='BUY'?1:2,volume:vol,relativeStopLoss:relSL,label:'SXU'};
+    if(relTP>0)orderPayload.relativeTakeProfit=relTP;
+    send(PT.NEW_ORDER_REQ,orderPayload);
+    return true;
+  }else{
+    bnCall('/api/binance/order',{symbol:a.bnSymbol,side:side==='BUY'?'BUY':'SELL',type:'MARKET',quantity:effectiveLotSize().toString()});
+    return true;
+  }
+}
+
+function closeAllPositions(a){
+  if(!a.positions.length)return;
+  a.positions.forEach(pos=>{if(pos.paper)paperClose(a,pos);else realClose(a,pos);});
+  // FIX #11 (the actual root cause of "flip fires once then sleeps
+  // forever," and quietly affected every strategy's real-trade accuracy):
+  // this used to immediately wipe a.positions=[] for EVERY position, real
+  // or paper, the instant this ran. A paper close is synchronous, so that's
+  // fine. A REAL close is NOT — realClose() only SENDS the close request;
+  // the position isn't actually gone until the broker's own EXECUTION_EVENT
+  // confirms it. And that confirmation is exactly where onExec looks up
+  // a.positions by positionId to record the realized PnL, update
+  // balance/Today P&L, and — for Flip and Scalping — queue the reversal
+  // via forceNextSide. Wiping the array immediately meant that lookup
+  // always found nothing, every single time a REAL position closed via
+  // Basket Profit or Max Hold (the two things that call this function).
+  // Balance eventually self-corrected via the periodic broker resync (FIX
+  // #9), which is why that looked fine — but Today P&L and Flip's queued
+  // reversal have no such fallback, so both silently died right here,
+  // every time. Only paper positions are cleared now; real ones stay until
+  // onExec's own confirmed removal — exactly what the single-position close
+  // button already did correctly (see closeOnePosition below).
+  a.positions=a.positions.filter(pos=>!pos.paper);
+  a.lastCloseAt=Date.now();
+  updateDash();
+}
+// Closes one specific position (by asset key + index in a.positions) instead
+// of the whole basket — used by the Open Positions panel's per-row close
+// button, mirroring how MT5 lets you close individual tickets.
+function closeOnePosition(symKey,idx){
+  const a=state.assets[symKey];if(!a)return;
+  const pos=a.positions[idx];if(!pos)return;
+  if(pos.paper){paperClose(a,pos);a.positions.splice(idx,1);updateDash();}
+  else{realClose(a,pos);} // real close removes it from a.positions once EXECUTION_EVENT confirms the fill
+}
+
+// FIX #21 ("hold, but while taking profits, not just sitting there"):
+// FIX #20 held the reversed side open without closing, even through
+// profitable moments, until a whole new candle arrived — that's not what
+// was actually wanted. This replaces it: a profitable original-leg close
+// starts a same-side "bias" (a.fakeLegBias = {side, barKey}) in the
+// opposite direction. Every time a position on that SAME side closes in
+// profit while still inside the candle the bias started on, it immediately
+// re-enters the SAME side again — banking profit repeatedly, back to back,
+// instead of waiting motionless. Only once the candle actually changes
+// does the bias end and control return to normal strategy (no forced
+// side) — matching "continue with the fake side up to the new candle."
+function paperClose(a,pos){
+  const exit=a.lastPrice;const pnl=(pos.side==='BUY'?exit-pos.entryPrice:pos.entryPrice-exit)*dollarPerUnitFor(pos.volume,a);
+  state.paperBalance+=pnl;state.todayPnl+=pnl;
+  if(pnl>0)state.wins++;else state.losses++;
+  log('Paper close '+pos.side+' PnL '+fmtPnL(pnl));
+  // Flip on TP — ported from Pepperstone: the instant a position closes at a
+  // profit, immediately queue the opposite side, independent of (and taking
+  // priority over) Auto-Reverse's "only if the signal itself disagrees"
+  // check below. Grid handles its own reversal via profit-lock in
+  // checkGridExit, so this only applies to every other strategy.
+  if(cfg.strategy==='scalping2'){
+    if(pnl>0){
+      const opposite=pos.side==='BUY'?'SELL':'BUY';
+      a.forceNextSide=null;a.scalpFlipPending=true;a.scalpPendingMode='OPPOSITE_CONFIRMED';a.scalpPendingSide=opposite;a.scalpLastClosedSide=pos.side;
+      log('Scalper profitable paper close — banking '+fmtPnL(pnl)+' on '+a.label+'; OPPOSITE '+opposite+' queued for same-candle execution.');
+      if(a.scalpReverseConfirmedSide===opposite&&!state.paused&&!state.stopped&&state.auto){
+        if(executeTrade(a,opposite)){a.scalpFlipPending=false;a.scalpPendingMode=null;a.scalpPendingSide=null;log('Scalper IMMEDIATE SAME-CANDLE FLIP executed — '+opposite+' on '+a.label+'.');}
+      }
+    }else{
+      a.forceNextSide=null;a.scalpFlipPending=false;a.scalpPendingMode=null;a.scalpPendingSide=null;
+    }
+    a.scalpPeakFloating=0;a.scalpProfitLockArmed=false;
+  }else if(cfg.flipOnTP&&cfg.strategy!=='grid'&&pnl>0){
+    a.forceNextSide=pos.side==='BUY'?'SELL':'BUY';
+  }else if(cfg.autoReverse&&a.signal!=='WAIT'&&a.signal!==pos.side){
+    setTimeout(()=>{if(!state.paused&&!state.stopped&&state.auto)executeTrade(a,a.signal);},500);
+  }
+}
+
+function realClose(a,pos){
+  // FIX ("ORDER ERROR: POSITION_LOCKED" / "POSITION_NOT_FOUND", "Max hold
+  // reached" firing 3x in a row for the same trade): nothing stopped this
+  // from being called again for a position that already had a close in
+  // flight. A real close isn't instant — pos stays in a.positions until
+  // the broker's EXECUTION_EVENT confirms it (see FIX #11 above), so if
+  // checkExits/max-hold re-ran on the next tick before that confirmation
+  // arrived, it saw the exact same still-open position and fired ANOTHER
+  // CLOSE_POSITION_REQ at the broker for a ticket that already had one
+  // pending — which is exactly what POSITION_LOCKED and the immediate
+  // repeat "Max hold reached" lines were. One request per position now;
+  // pos.closePending is cleared the moment onExec actually confirms the
+  // close (or after 15s as a safety net, in case a confirmation never
+  // arrives — e.g. the request itself got dropped).
+  if(pos.closePending)return;
+  pos.closePending=true;
+  clearTimeout(pos.closePendingTimer);
+  pos.closePendingTimer=setTimeout(()=>{pos.closePending=false;},15000);
+  if(state.broker==='ctrader'){
+    send(PT.CLOSE_POSITION_REQ,{ctidTraderAccountId:state.accountId,positionId:pos.positionId,volume:pos.volume||0});
+  }else{
+    const side=pos.side==='BUY'?'SELL':'BUY';
+    bnCall('/api/binance/order',{symbol:a.bnSymbol,side,type:'MARKET',quantity:effectiveLotSize().toString()});
+  }
+  log('Close sent: '+pos.side+' on '+a.label);
+}
+
+function updatePositions(a){
+  let total=0;a.positions.forEach(p=>{
+    const pnl=(p.side==='BUY'?a.lastPrice-p.entryPrice:p.entryPrice-a.lastPrice)*dollarPerUnitFor(p.volume,a);
+    p.floatingPnL=pnl;total+=pnl;
+    if(pnl>p.peakPnL)p.peakPnL=pnl;
+  });
+  a.floatingPnL=total;
+}
+
+// FIX ("respect my TP and SL... never let it pull all the way back... close
+// fast with profit, but balance kept going down anyway"): Flip's exit used
+// to be its own special case — no take-profit at all, and profit protection
+// was a flat $0.20 giveback-from-peak with no floor and no scaling. Against
+// an $8 stop-loss, that's structurally lopsided: most winning closes were
+// tiny (exiting the instant a small peak gave back just 20 cents), while a
+// losing close ran the full $8 — many small wins can't outpace occasional
+// full-size losses at that ratio, which is exactly "closing with profit but
+// the balance kept going down." Flip no longer has a separate exit
+// mechanism: it now takes profit at cfg.basketProfit like every other
+// strategy (checkExits below) and uses the same proportional profit-lock
+// ratchet in checkTrail (locks ~90% of peak profit above a small cushion,
+// only ever tightening) instead of a fixed 20-cent trigger — a $3 peak
+// protects meaningfully more than a $0.30 peak did before, in proportion,
+// rather than both being cut off at the same 20 cents. The always-flip-
 // direction-on-close behavior in paperClose/onExec is unchanged.
 
 function checkExits(a){
@@ -3156,13 +3898,29 @@ function onExec(p){
           // of Auto-Reverse. Grid handles its own reversal via profit-lock
           // in checkGridExit.
           if(cfg.strategy==='scalping2'){
-            // Broker-confirmed close: do not immediately reverse. Require two
-            // newly closed M1 candles after the close before another entry.
-            a.forceNextSide=null;a.scalpFlipPending=false;a.scalpPendingMode=null;a.scalpPendingSide=null;
-            a.scalpLastClosedSide=closedPos.side;
-            a.scalpPeakFloating=0;a.scalpProfitLockArmed=false;a.scalpProtectHits=0;
-            a.scalpCooldownUntil=Date.now()+120000;a.scalpWaitBarsAfterClose=2;
-            log('Smart scalper close confirmed — '+fmtPnL(pnl)+' on '+a.label+'; no same-candle flip. Waiting for 2 fresh M1 confirmations.');
+            if(pnl>0){
+              const opposite=closedPos.side==='BUY'?'SELL':'BUY';
+              a.forceNextSide=null;
+              a.scalpFlipPending=true;
+              a.scalpPendingMode='OPPOSITE_CONFIRMED';
+              a.scalpPendingSide=opposite;
+              a.scalpLastClosedSide=closedPos.side;
+              // If the opposite micro-pullback is already confirmed at the
+              // exact broker-close event, fire on this same event loop. This
+              // removes the mobile setTimeout/tick-delay that was making the
+              // flip appear late or not at all.
+              log('Scalper profitable close confirmed — banking '+fmtPnL(pnl)+' on '+a.label+'; OPPOSITE '+opposite+' queued for same-candle execution.');
+              if(a.scalpReverseConfirmedSide===opposite && !state.paused&&!state.stopped&&state.auto){
+                if(executeTrade(a,opposite)){
+                  a.scalpFlipPending=false;a.scalpPendingMode=null;a.scalpPendingSide=null;
+                  log('Scalper IMMEDIATE SAME-CANDLE FLIP executed — '+opposite+' on '+a.label+'.');
+                }
+              }
+            }else{
+              a.forceNextSide=null;a.scalpFlipPending=false;a.scalpPendingMode=null;a.scalpPendingSide=null;
+            }
+            a.scalpPeakFloating=0;
+            a.scalpProfitLockArmed=false;
           }else if(cfg.flipOnTP&&cfg.strategy!=='grid'&&pnl>0){
             a.forceNextSide=closedPos.side==='BUY'?'SELL':'BUY';
           }else if(cfg.autoReverse&&a.signal!=='WAIT'&&a.signal!==closedPos.side&&!state.paused&&!state.stopped&&state.auto){
@@ -3362,21 +4120,9 @@ function renderSessionBadge(){
   const el=$('sessionBadge');if(!el)return;
   const h=new Date().getUTCHours();
   const live=SESSIONS.filter(s=>s.start<s.end?(h>=s.start&&h<s.end):(h>=s.start||h<s.end)).map(s=>s.name);
-  const _sb=live.length?('Session: '+live.join(' + ')+' open'):'Session: between major sessions (low liquidity)';
-  if(el.textContent!==_sb)el.textContent=_sb;
+  el.textContent=live.length?('Session: '+live.join(' + ')+' open'):'Session: between major sessions (low liquidity)';
 }
-// PERF FIX: updateDash() used to run on EVERY tick of EVERY subscribed pair
-// (9 pairs, several ticks/sec each) and rewrote the DOM each time. Now it is
-// coalesced to at most ~5 runs/sec (leading + trailing), which is invisible
-// to the eye but removes the main-thread pile-up that froze the app.
-var __dashLast=0,__dashTimer=null;
 function updateDash(){
-  const now=Date.now(),wait=200-(now-__dashLast);
-  if(wait<=0){__dashLast=now;updateDashNow();return;}
-  if(__dashTimer)return;
-  __dashTimer=setTimeout(()=>{__dashTimer=null;__dashLast=Date.now();try{updateDashNow();}catch(e){console.error(e);}},wait);
-}
-function updateDashNow(){
   resetDaily();
   renderSessionBadge();
   checkDailyStopLimits();
@@ -3426,11 +4172,10 @@ function renderPositionsPanel(){
     });
   });
   if(!rows.length){
-    const _empty='<div class="positions-empty">No open positions right now.</div>';
-    if(panel.__lastHtml!==_empty){panel.innerHTML=_empty;panel.__lastHtml=_empty;}
+    panel.innerHTML='<div class="positions-empty">No open positions right now.</div>';
     return;
   }
-  const _html=rows.map(({a,p,idx})=>{
+  panel.innerHTML=rows.map(({a,p,idx})=>{
     const pnl=p.floatingPnL||0;
     const digits=digitsFor(a);
     const notional=Math.abs(p.entryPrice*dollarPerUnitFor(p.volume,a))||1;
@@ -3449,7 +4194,6 @@ function renderPositionsPanel(){
       +'</div>'
     +'</div>';
   }).join('');
-  if(panel.__lastHtml!==_html){panel.innerHTML=_html;panel.__lastHtml=_html;}
 }
 
 // ========== INIT ==========
@@ -3488,7 +4232,7 @@ function runIntroTicker(){
   const box=$('introTicker'); if(!box)return;
   let i=0;
   function nextLine(){
-    if(i>=INTRO_LINES.length)i=0; // keep the boot ticker alive for the full 30s
+    if(i>=INTRO_LINES.length)i=0; // loop the list if 60s runs longer than the script
     const line=INTRO_LINES[i++];
     const el=document.createElement('div');
     el.style.cssText='font-family:Orbitron,sans-serif;font-size:13px;letter-spacing:1px;color:#00ffcc;text-shadow:0 0 6px rgba(0,255,200,.8);white-space:nowrap;overflow:hidden;padding:3px 16px;';
@@ -3508,114 +4252,42 @@ function runIntroTicker(){
 // positions are saved locally, so they stay where the owner placed them.
 function makeSeriesXDraggable(id,storageKey){
   const el=$(id);if(!el)return;
-  el.style.touchAction='none';el.style.userSelect='none';el.style.webkitUserSelect='none';el.style.webkitUserDrag='none';
-  let dragging=false,moved=false,startX=0,startY=0,startL=0,startT=0,pointerId=null;
+  let dragging=false,startX=0,startY=0,startL=0,startT=0;
   try{const saved=JSON.parse(localStorage.getItem(storageKey)||'null');if(saved&&Number.isFinite(saved.left)&&Number.isFinite(saved.top)){el.style.left=saved.left+'px';el.style.top=saved.top+'px';el.style.right='auto';el.style.bottom='auto';}}catch(e){}
-  const point=e=>({x:Number.isFinite(e.clientX)?e.clientX:0,y:Number.isFinite(e.clientY)?e.clientY:0});
-  const down=e=>{
-    if(e.button!=null&&e.button!==0)return;
-    if(e.target&&e.target.closest&&e.target.closest('button,a,input,select'))return;
-    const p=point(e),r=el.getBoundingClientRect();
-    dragging=true;moved=false;pointerId=e.pointerId;startX=p.x;startY=p.y;startL=r.left;startT=r.top;
-    try{el.setPointerCapture?.(pointerId);}catch(_){}
-    e.preventDefault();e.stopPropagation();
-  };
-  const move=e=>{
-    if(!dragging||(pointerId!=null&&e.pointerId!=null&&e.pointerId!==pointerId))return;
-    const p=point(e);
-    if(Math.abs(p.x-startX)+Math.abs(p.y-startY)>5)moved=true;
-    let l=startL+p.x-startX,t=startT+p.y-startY;
-    const pad=6;
-    l=Math.max(pad,Math.min(window.innerWidth-el.offsetWidth-pad,l));
-    t=Math.max(pad,Math.min(window.innerHeight-el.offsetHeight-pad,t));
-    el.style.left=l+'px';el.style.top=t+'px';el.style.right='auto';el.style.bottom='auto';
-    e.preventDefault();e.stopPropagation();
-  };
-  const up=e=>{
-    if(!dragging)return;
-    dragging=false;try{el.releasePointerCapture?.(pointerId);}catch(_){}
-    pointerId=null;
-    const r=el.getBoundingClientRect();
-    try{localStorage.setItem(storageKey,JSON.stringify({left:r.left,top:r.top}));}catch(_){}
-    if(moved){el.dataset.dragged='1';setTimeout(()=>{delete el.dataset.dragged;},120);}
-    e.preventDefault?.();e.stopPropagation();
-  };
-  el.addEventListener('pointerdown',down,{passive:false});
-  el.addEventListener('pointermove',move,{passive:false});
-  el.addEventListener('pointerup',up,{passive:false});
-  el.addEventListener('pointercancel',up,{passive:false});
-  el.addEventListener('click',e=>{if(el.dataset.dragged){e.preventDefault();e.stopPropagation();delete el.dataset.dragged;}},{capture:true});
+  const down=e=>{if(e.target&&e.target.closest&&e.target.closest('button,a,input,select'))return;dragging=true;const p=e.touches?e.touches[0]:e;const r=el.getBoundingClientRect();startX=p.clientX;startY=p.clientY;startL=r.left;startT=r.top;e.preventDefault?.();};
+  const move=e=>{if(!dragging)return;const p=e.touches?e.touches[0]:e;let l=startL+p.clientX-startX,t=startT+p.clientY-startY;const pad=6;l=Math.max(pad,Math.min(window.innerWidth-el.offsetWidth-pad,l));t=Math.max((parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-top'))||0)+pad,Math.min(window.innerHeight-el.offsetHeight-pad,t));el.style.left=l+'px';el.style.top=t+'px';el.style.right='auto';el.style.bottom='auto';e.preventDefault?.();};
+  const up=()=>{if(!dragging)return;dragging=false;const r=el.getBoundingClientRect();try{localStorage.setItem(storageKey,JSON.stringify({left:r.left,top:r.top}));}catch(e){}};
+  el.addEventListener('pointerdown',down,{passive:false});window.addEventListener('pointermove',move,{passive:false});window.addEventListener('pointerup',up,{passive:true});
 }
 function toggleSeriesXScannerPanel(){const p=$('seriesxScannerPanel');if(p)p.classList.toggle('hidden');}
-function scannerCandidateAssets(){return Object.values(state.assets||{}).filter(a=>a&&a.lastPrice>0);}
-function computeSeriesXScannerPulse(a){
-  if(!a)return;
-  const __n=Date.now();if(a.__pulseAt&&__n-a.__pulseAt<500)return;a.__pulseAt=__n;
-  const bars=(a.bars1||[]).slice(-80),cur=a.currentBar;
-  const all=cur?[...bars,cur]:bars;
-  if(all.length<24){a.scannerSignal='COLLECTING';a.scannerScore=0;a.scannerReason='Collecting live candles';return;}
-  const c=all[all.length-1],p=all[all.length-2],p2=all[all.length-3];
-  const closes=all.map(x=>x.c).filter(Number.isFinite);
-  const e5=ema(closes,5),e13=ema(closes,13),e21=ema(closes,21),e50=ema(closes,50),r=rsi(closes,14),av=atr(all,14)||0;
-  const trend=e13>e21?'BUY':e13<e21?'SELL':'WAIT';
-  const slow=e21>e50?'BUY':e21<e50?'SELL':'WAIT';
-  const bull=x=>x&&x.c>x.o,bear=x=>x&&x.c<x.o;
-  const body=x=>Math.abs(x.c-x.o),range=x=>Math.max(x.h-x.l,1e-9);
-  const bullReject=bull(p)&&Math.min(p.o,p.c)-p.l>=body(p)*1.1&&(p.c-p.l)/range(p)>=.62;
-  const bearReject=bear(p)&&p.h-Math.max(p.o,p.c)>=body(p)*1.1&&(p.h-p.c)/range(p)>=.62;
-  const bullConfirm=bull(c)&&bull(p)&&c.c>p.c;
-  const bearConfirm=bear(c)&&bear(p)&&c.c<p.c;
-  const bullBreak=c.c>p.h,bearBreak=c.c<p.l;
-  const spreadPct=a.ask&&a.bid&&a.lastPrice?((a.ask-a.bid)/a.lastPrice)*100:0;
-  if(spreadPct>cfg.maxSpreadPct){a.scannerSignal='WAIT';a.scannerScore=35;a.scannerReason='Spread too wide';return;}
-  let buy=0,sell=0,br=[],sr=[];
-  if(trend==='BUY'){buy+=24;br.push('short trend');}else if(trend==='SELL'){sell+=24;sr.push('short trend');}
-  if(slow==='BUY'){buy+=14;br.push('structure');}else if(slow==='SELL'){sell+=14;sr.push('structure');}
-  if(bullConfirm){buy+=22;br.push('2-candle follow-through');}if(bearConfirm){sell+=22;sr.push('2-candle follow-through');}
-  if(bullReject&&bull(c)&&bullBreak){buy+=22;br.push('rejection + break');}
-  if(bearReject&&bear(c)&&bearBreak){sell+=22;sr.push('rejection + break');}
-  if(e5!=null&&e13!=null){if(e5>e13)buy+=8;else if(e5<e13)sell+=8;}
-  if(r!=null){if(r>=52&&r<=70)buy+=5;if(r<=48&&r>=30)sell+=5;}
-  if(av>0&&body(c)>av*1.8){buy-=15;sell-=15;}
-  // Counter-trend scanner signals need stronger evidence than continuation.
-  if(trend==='SELL'&&!bullReject)buy-=18;
-  if(trend==='BUY'&&!bearReject)sell-=18;
-  let side='WAIT',score=50,reason='No confirmed setup';
-  if(buy>=72&&buy>sell+8){side='BUY';score=buy;reason=br.join(' · ');}
-  else if(sell>=72&&sell>buy+8){side='SELL';score=sell;reason=sr.join(' · ');}
-  else if(Math.max(buy,sell)>=58){score=Math.max(buy,sell);reason='Setup forming — waiting for confirmation';}
-  a.scannerSignal=side;a.scannerScore=Math.max(0,Math.min(99,Math.round(score)));a.scannerReason=reason||'No confirmed setup';
-}
+function scannerCandidateAssets(){return Object.values(state.assets||{}).filter(a=>a&&a.dataReady&&a.lastPrice>0&&Array.isArray(a.bars1)&&a.bars1.length>=20);}
 function updateSeriesXScanner(){
   const list=$('seriesxScannerList'),st=$('seriesxScannerState');if(!list)return;
-  if(document.hidden)return;
-  const arr=scannerCandidateAssets().map(a=>{computeSeriesXScannerPulse(a);return {a,score:Number(a.scannerScore||0),signal:a.scannerSignal||'COLLECTING',reason:a.scannerReason||'Waiting for live data'};}).sort((x,y)=>y.score-x.score);
-  const live=arr.filter(x=>x.signal==='BUY'||x.signal==='SELL');
-  if(st){const _t=live.length?'LIVE':'COLLECTING';if(st.textContent!==_t)st.textContent=_t;}
-  if(!arr.length){list.innerHTML='Scanner is starting live market feeds…';return;}
-  const __html=arr.slice(0,8).map(x=>{const c=x.signal==='BUY'?'#4f8':x.signal==='SELL'?'#f66':'#ffd84d';return '<div style="padding:6px 0;border-bottom:1px solid #222;"><div style="display:flex;justify-content:space-between;gap:8px;"><span>'+x.a.label+'</span><span style="color:'+c+';font-weight:700;">'+x.signal+(x.signal==='COLLECTING'?'':' '+x.score+'%')+'</span></div><div style="font-size:9px;color:var(--dim);margin-top:2px;">'+x.reason+'</div></div>';}).join('');
-  if(list.__lastHtml!==__html){list.innerHTML=__html;list.__lastHtml=__html;}
+  const arr=scannerCandidateAssets().map(a=>({a,score:Number(a.score||0),signal:a.signal||'WAIT'})).sort((x,y)=>y.score-x.score);
+  if(st)st.textContent=arr.length?'LIVE':'COLLECTING DATA';
+  if(!arr.length){list.innerHTML='Scanning live markets… waiting for enough candles/ticks. <span style="color:var(--dim)">No trade setup is being claimed yet.</span>';return;}
+  list.innerHTML=arr.slice(0,8).map(x=>{const c=x.signal==='BUY'?'#4f8':x.signal==='SELL'?'#f66':'#ffd84d';return '<div style="display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid #222;"><span>'+x.a.label+'</span><span style="color:'+c+';font-weight:700;">'+x.signal+' '+x.score+'%</span></div>';}).join('');
 }
-function startSeriesXScanner(){clearInterval(window.__seriesxScannerTimer);window.__seriesxScannerTimer=setInterval(updateSeriesXScanner,1000);updateSeriesXScanner();}
-function initSeriesXMasterUI(){makeSeriesXDraggable('meganFab','seriesx_megan_fab_pos');makeSeriesXDraggable('seriesxSignalFab','seriesx_signal_fab_pos');startSeriesXScanner();}
+function startSeriesXScanner(){
+  // Scan the markets that have live feeds. The selected market is always
+  // included; additional scanner-only feeds are added after cTrader symbols
+  // are indexed below. Scanner-only assets can never trade because their
+  // tradingEnabled flag is false.
+  clearInterval(window.__seriesxScannerTimer);
+  window.__seriesxScannerTimer=setInterval(updateSeriesXScanner,1000);
+  updateSeriesXScanner();
+}
+function initSeriesXMasterUI(){
+  makeSeriesXDraggable('meganFab','seriesx_megan_fab_pos');
+  makeSeriesXDraggable('seriesxSignalFab','seriesx_signal_fab_pos');
+  startSeriesXScanner();
+}
 
 function bootIntro(oauthHandled){
   if(oauthHandled){ showScreen('splash'); return; }
   showScreen('intro');
   const stopTicker=runIntroTicker();
-  const num=document.getElementById('introCountdownNum');
-  let remaining=30;if(num)num.textContent=remaining;
-  clearInterval(window.__seriesxIntroCountdown);
-  window.__seriesxIntroCountdown=setInterval(()=>{
-    remaining=Math.max(0,remaining-1);if(num)num.textContent=remaining;
-    if(remaining<=0){clearInterval(window.__seriesxIntroCountdown);window.__seriesxIntroCountdown=null;}
-  },1000);
-  clearTimeout(window.__seriesxIntroTimer);
-  window.__seriesxIntroTimer=setTimeout(()=>{
-    if(stopTicker)stopTicker();
-    clearInterval(window.__seriesxIntroCountdown);window.__seriesxIntroCountdown=null;
-    showScreen('splash');
-  },30000);
+  setTimeout(()=>{ if(stopTicker)stopTicker(); showScreen('splash'); },30000);
 }
 initSeriesXMasterUI();
 checkOAuthCallback().then(handled=>bootIntro(handled));
@@ -3862,144 +4534,5 @@ async function meganAutoTick(a){
 <script src="ai-zone-strategist.js"></script>
 <script src="win-tracker.js"></script>
 <script src="scanner-pro.js"></script>
-
-<script>
-// SERIES X MOBILE FLOATING-CONTROL BRIDGE
-// External AI Zone / Scanner add-ons create the visible "AI v8" and "SIGNALS"
-// pills after this page loads. This delegated layer makes those actual visible
-// controls draggable too, without requiring the add-on files to be rewritten.
-(function(){
-  const POS={ai:'seriesx_ai_v8_pos',sig:'seriesx_signals_pos'};
-  function labelOf(el){return (el&&el.textContent||'').replace(/\s+/g,' ').trim().toUpperCase();}
-  function candidate(el,kind){
-    if(!el||el===document.body)return false;
-    const t=labelOf(el);
-    if(kind==='ai')return /\bAI\s*V8\b/.test(t)&&t.length<100;
-    return /\bSIGNALS\b/.test(t)&&t.length<80;
-  }
-  // FIX (dashboard vanishing after login): the old matcher accepted ANY element
-  // containing the text "AI v8"/"SIGNALS" and then walked up to a parent that
-  // was merely position:absolute -- which is what every .screen is. So the whole
-  // dashboard screen got treated as the floating pill: touch-action:none, all
-  // touches swallowed, and a saved left/top applied to it, shoving the entire
-  // screen off-screen (only Megan's 3D body, behind everything, stayed visible).
-  // Only small, real floating pills outside any screen may be draggable now.
-  function safePill(n){
-    if(!n||n===document.body||n===document.documentElement||n.id==='app')return false;
-    if(/^(SCRIPT|STYLE|HTML|BODY)$/.test(n.tagName))return false;
-    if(n.classList&&(n.classList.contains('screen')||n.classList.contains('dash-scroll')||n.classList.contains('screen-body')))return false;
-    if(n.closest&&n.closest('.screen'))return false;
-    if(n.querySelector&&n.querySelector('.screen,.dash-scroll,.screen-body'))return false;
-    const pos=getComputedStyle(n).position;
-    if(pos!=='fixed'&&pos!=='absolute')return false;
-    const r=n.getBoundingClientRect();
-    return r.width>0&&r.height>0&&r.width<=320&&r.height<=140;
-  }
-  function healScreens(){
-    document.querySelectorAll('#app,.screen,.dash-scroll,.screen-body').forEach(s=>{
-      if(s.style.left||s.style.top||s.style.right||s.style.bottom){s.style.left=s.style.top=s.style.right=s.style.bottom='';}
-      if(s.style.touchAction==='none')s.style.touchAction='';
-    });
-  }
-  function closestFixed(el,kind){
-    let n=el;
-    for(let i=0;i<6&&n&&n!==document.body;i++,n=n.parentElement){
-      const r=n.getBoundingClientRect();
-      const st=getComputedStyle(n);
-      if(candidate(n,kind) && (st.position==='fixed'||st.position==='absolute'||r.width<260))return n;
-    }
-    return null;
-  }
-  function make(el,kind){
-    if(!el||el.dataset.sxDragReady)return;
-    el.dataset.sxDragReady='1';el.style.touchAction='none';el.style.userSelect='none';el.style.webkitUserSelect='none';
-    let active=false,moved=false,sx=0,sy=0,sl=0,st=0,pid=null;
-    try{const p=JSON.parse(localStorage.getItem(POS[kind])||'null');if(p&&Number.isFinite(p.left)&&Number.isFinite(p.top)){const w=el.offsetWidth||0,h=el.offsetHeight||0;const l=Math.max(4,Math.min(innerWidth-w-4,p.left)),t=Math.max(4,Math.min(innerHeight-h-4,p.top));el.style.left=l+'px';el.style.top=t+'px';el.style.right='auto';el.style.bottom='auto';}}catch(_){ }
-    const down=e=>{
-      if(e.button!=null&&e.button!==0)return;
-      const r=el.getBoundingClientRect();const x=e.clientX,y=e.clientY;
-      active=true;moved=false;pid=e.pointerId;sx=x;sy=y;sl=r.left;st=r.top;
-      try{el.setPointerCapture?.(pid);}catch(_){ }
-      e.preventDefault();e.stopPropagation();
-    };
-    const move=e=>{
-      if(!active)return;
-      const x=e.clientX,y=e.clientY;
-      if(Math.abs(x-sx)+Math.abs(y-sy)>4)moved=true;
-      let l=sl+x-sx,t=st+y-sy;
-      l=Math.max(4,Math.min(innerWidth-el.offsetWidth-4,l));t=Math.max(4,Math.min(innerHeight-el.offsetHeight-4,t));
-      el.style.left=l+'px';el.style.top=t+'px';el.style.right='auto';el.style.bottom='auto';
-      e.preventDefault();e.stopPropagation();
-    };
-    const up=e=>{
-      if(!active)return;active=false;try{el.releasePointerCapture?.(pid);}catch(_){ }
-      const r=el.getBoundingClientRect();try{localStorage.setItem(POS[kind],JSON.stringify({left:r.left,top:r.top}));}catch(_){ }
-      if(moved){el.dataset.sxDragged='1';setTimeout(()=>delete el.dataset.sxDragged,250);}
-      e.preventDefault();e.stopPropagation();
-    };
-    el.addEventListener('pointerdown',down,{capture:true,passive:false});el.addEventListener('pointermove',move,{capture:true,passive:false});el.addEventListener('pointerup',up,{capture:true,passive:false});el.addEventListener('pointercancel',up,{capture:true,passive:false});
-    el.addEventListener('click',e=>{if(el.dataset.sxDragged){e.preventDefault();e.stopPropagation();delete el.dataset.sxDragged;}},{capture:true});
-  }
-  function scan(){
-    healScreens();
-    document.querySelectorAll('body *').forEach(el=>{
-      if(el.children.length>5)return;
-      if(candidate(el,'ai')){const t=closestFixed(el,'ai')||el;if(safePill(t))make(t,'ai');}
-      if(candidate(el,'sig')){const t=closestFixed(el,'sig')||el;if(safePill(t))make(t,'sig');}
-    });
-  }
-  // PERF FIX: this used to re-crawl every element in the page (with
-  // getComputedStyle) 4x/second whenever ANY node changed - and the app
-  // changes nodes every tick - which is what froze the phone. Now it only
-  // reacts when a newly added element actually mentions the AI v8 / SIGNALS
-  // pills, and never more than once per second.
-  let scanTimer=null;
-  new MutationObserver(muts=>{
-    if(scanTimer)return;
-    let hit=false;
-    for(const m of muts){
-      for(const n of m.addedNodes){
-        if(n.nodeType!==1)continue;
-        const t=(n.textContent||'');
-        if(t.length<400&&/AI\s*V8|SIGNALS/i.test(t)){hit=true;break;}
-      }
-      if(hit)break;
-    }
-    if(!hit)return;
-    scanTimer=setTimeout(()=>{scanTimer=null;scan();},1000);
-  }).observe(document.body,{subtree:true,childList:true});
-  scan();setTimeout(scan,500);setTimeout(scan,1500);setTimeout(scan,3000);
-})();
-
-// Feed the visible external scanner panel from the native live cTrader candle
-// data as well. This fixes the old static "waiting is a position" message even
-// when scanner-pro.js has not produced its own result yet.
-(function(){
-  function updateExternalScanner(){
-    try{
-      const assets=Object.values(state.assets||{}).filter(a=>a&&a.lastPrice>0);
-      if(!assets.length)return;
-      assets.forEach(a=>computeSeriesXScannerPulse(a));
-      const ranked=assets.map(a=>({a,score:a.scannerScore||0,signal:a.scannerSignal||'COLLECTING',reason:a.scannerReason||'Collecting live candles'})).sort((x,y)=>y.score-x.score);
-      const lines=ranked.slice(0,5).map(x=>x.a.label+' — '+x.signal+(x.signal==='BUY'||x.signal==='SELL'?' '+x.score+'%':'')+' · '+x.reason);
-      const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null);
-      const hits=[];let tn;
-      while((tn=walker.nextNode())){
-        const v=tn.nodeValue;
-        if(v&&v.length<80&&v.indexOf('No valid setup right now')>-1)hits.push(tn.parentElement);
-      }
-      hits.forEach(n=>{
-        if(!n)return;
-        const t=(n.textContent||'').trim();
-        if(t==='No valid setup right now \u2014 waiting is a position.'||t==='No valid setup right now - waiting is a position.'){
-          n.textContent=lines.join('\n');n.style.whiteSpace='pre-line';n.style.fontSize='12px';n.style.lineHeight='1.45';n.style.color='#cfefff';
-        }
-      });
-    }catch(_){ }
-  }
-  setInterval(()=>{if(!document.hidden)updateExternalScanner();},2000);setTimeout(updateExternalScanner,800);
-})();
-</script>
-
 </body>
 </html>
